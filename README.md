@@ -43,6 +43,8 @@ For Android API >= 23, you need to ask for permission in runtime. You can use th
 
 You need to define the permission [NSLocationWhenInUseUsageDescription](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW26) on `Info.plist`.
 
+Also, you need to ask for permissions in runtime. You can use the React Native [Geolocation API](https://facebook.github.io/react-native/docs/geolocation) or a universal library like [react-native-permissions](https://github.com/yonahforst/react-native-permissions).
+
 ```xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs to get your location...</string>
