@@ -20,12 +20,11 @@ public class GetLocation {
     private final LocationManager locationManager;
 
     private Timer timer;
-    private LocationListener listener = null;
+    private LocationListener listener;
 
     public GetLocation(LocationManager locationManager) {
         this.locationManager = locationManager;
     }
-
 
     public void get(ReadableMap options, final Promise promise) {
         try {
@@ -47,7 +46,7 @@ public class GetLocation {
             listener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    timer.cancel();
+                    cancelTimer();
                     Log.d("Location", String.format("onLocationChanged: %b", location));
                     if (location != null) {
                         locationManager.removeUpdates(listener);
@@ -98,12 +97,18 @@ public class GetLocation {
             }
         } catch (SecurityException ex) {
             ex.printStackTrace();
-            timer.cancel();
+            cancelTimer();
             promise.reject("5", "Location permission denied", ex);
         } catch (Exception ex) {
             ex.printStackTrace();
-            timer.cancel();
+            cancelTimer();
             promise.reject("1", "Location not available", ex);
+        }
+    }
+
+    private void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
         }
     }
 

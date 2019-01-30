@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTConvert.h>
 #import <CoreLocation/CoreLocation.h>
-#import "SettingsUtilModule.h"
+#import "SettingsUtil.h"
 
 @interface LocationModule : NSObject <RCTBridgeModule, CLLocationManagerDelegate>
 
