@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Platform, StyleSheet, Text, View,
-    Button, PermissionsAndroid,
+    Button, PermissionsAndroid, Alert,
 } from 'react-native';
 
 import GetLocation from 'react-native-get-location';
@@ -77,7 +77,25 @@ export default class App extends Component {
                         });
                     })
                     .catch(ex => {
-                        console.warn(ex.code, ex.message);
+                        const { code, message } = ex;
+                        console.warn(ex, code, message);
+                        if (code === '1') {
+                            // iOS
+                            // Permission Denied or Location Disabled
+                            // Android 
+                            // Location Disabled
+                            Alert.alert('Location not available');
+                        }
+                        if (code === '5') {
+                            // Android
+                            // Permission Denied
+                            Alert.alert('Permission denied');
+                        }
+                        if (code === '3') {
+                            // Android and iOS
+                            // Timeout
+                            Alert.alert('Timeout');
+                        }
                         this.setState({
                             location: null,
                             loading: false,
