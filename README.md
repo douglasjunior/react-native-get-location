@@ -4,7 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/react-native-get-location.svg)](https://www.npmjs.com/package/react-native-get-location)
 [![npm downloads](https://img.shields.io/npm/dt/react-native-get-location.svg)](#install-with-react-native-link)
 
-Simple to use React Native library to get device location for Android and iOS.
+⚛ Simple to use React Native library to get device location for Android and iOS.
 
 ## Requirements
 

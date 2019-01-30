@@ -1,10 +1,32 @@
 {
   "name": "react-native-get-location",
-  "version": "0.0.7",
-  "description": "React Native library to get or watch location on Android and iOS.",
+  "displayName": "React-Native Get Location",
+  "version": "0.0.9",
+  "description": "⚛ Simple to use React Native library to get device location for Android and iOS.",
   "main": "index.js",
   "license": "MIT",
   "private": false,
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/douglasjunior/react-native-get-location.git"
+  },
+  "keywords": [
+		"react-native",
+		"android",
+		"ios",
+		"geolocation",
+		"location",
+		"gps"
+  ],
+  "author": {
+    "name": "Douglas Nassif Roma Junior",
+    "email": "nassifrroma@gmail.com",
+    "url": "http://douglasjunior.me"
+  },
+  "bugs": {
+		"url": "https://github.com/douglasjunior/react-native-get-location/issues"
+	},
+	"homepage": "https://github.com/douglasjunior/react-native-get-location",
   "peerDependencies": {
     "react-native": ">=0.44"
   }
