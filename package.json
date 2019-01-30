@@ -1,0 +1,11 @@
+{
+  "name": "react-native-get-location",
+  "version": "1.0.0",
+  "description": "React Native library to get or watch location on Android and iOS.",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "peerDependencies": {
+    "react-native": ">=0.44"
+  }
+}
