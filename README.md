@@ -4,9 +4,7 @@
 [![npm version](https://img.shields.io/npm/v/react-native-get-location.svg)](https://www.npmjs.com/package/react-native-get-location)
 [![npm downloads](https://img.shields.io/npm/dt/react-native-get-location.svg)](#install-with-react-native-link)
 
-Library to prevent issues of keyboard sliding up and cover inputs on React-Native iOS projects ⚛. Thanks to awesome [IQKeyboardManager](https://github.com/hackiftekhar/IQKeyboardManager) ❤️.
-
-This is only for iOS, Android no needed. For Android just add `android:windowSoftInputMode="adjustResize"` to your activity.
+Simple to use React Native library to get device location for Android and iOS.
 
 ## Requirements
 
@@ -77,10 +75,10 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
 ### function `GetLocation.getCurrentPosition(LocationConfig)`
 
 **Parameters:**
-   - `LocationConfig`: Object to configure how to get the user's current location.
+   - [`LocationConfig`](#object-locationconfig): Configuration object to determine how to get the user current location.
 
 **Return:**
-   - `Promise<Location>`: Promise thats resolve to a Location object.
+   - `Promise<`[`Location`](#object-location)`>`: Promise thats resolve to a Location object.
 
 ### Object `LocationConfig`
 
