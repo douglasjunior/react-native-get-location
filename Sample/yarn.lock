@@ -4555,10 +4555,10 @@ react-is@^16.6.3:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
   integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
-react-native-get-location@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-get-location/-/react-native-get-location-0.0.1.tgz#a2dac1cab5993e2257692ee04035260186e5d833"
-  integrity sha512-WRHVpajyPRGIPLYbqN/3Fn8MlEJnwLn/Z1mPEOpDeyQbojzeOGq7ljSz1zm6PuNjPgiJnMOpXiK+emuWpV407A==
+react-native-get-location@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-get-location/-/react-native-get-location-0.0.5.tgz#d8d6faf4f27d5ebe73aaedd9aafb498676d175e9"
+  integrity sha512-sgPn4UuLsDAYpnqEz45pYw/AI0Wx9rjEViBCCK9fLgqu0YcKhbNMsOB2dMBTB7cp62wYryJARtY4y31EIxNQRg==
 
 react-native@0.57.8:
   version "0.57.8"

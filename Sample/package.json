@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "16.6.3",
     "react-native": "0.57.8",
-    "react-native-get-location": "^0.0.1"
+    "react-native-get-location": "0.0.5"
   },
   "devDependencies": {
     "babel-core": "7.0.0-bridge.0",
