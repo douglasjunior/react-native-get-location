@@ -2,3 +2,4 @@ node_modules/
 __tests__/
 .vscode/
 yarn.lock
+Sample/
