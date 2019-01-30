@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
         color: '#333333',
         marginBottom: 5,
     },
+    button: {
+        marginBottom: 8,
+    }
 });
 
 export default class App extends Component {
@@ -46,14 +49,14 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        this._requestPermission();
+        this._requestLocationPermission();
     }
 
     _onClick = () => {
         this._requestLocation();
     }
 
-    _requestPermission = () => {
+    _requestLocationPermission = () => {
         if (OS === 'android') {
             return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
         }
@@ -62,7 +65,7 @@ export default class App extends Component {
     }
 
     _requestLocation = () => {
-        this._requestPermission()
+        this._requestLocationPermission()
             .then(() => {
 
                 this.setState({ loading: true });
@@ -110,17 +113,52 @@ export default class App extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome to React Native!</Text>
-                <Text style={styles.instructions}>To get location, press the button!</Text>
-                <Button
-                    disabled={loading}
-                    title="Get Location"
-                    onPress={this._onClick}
-                />
+                <Text style={styles.instructions}>To get location, press the button:</Text>
+                <View style={styles.button}>
+                    <Button
+                        disabled={loading}
+                        title="Get Location"
+                        onPress={this._onClick}
+                    />
+                </View>
                 {location ? (
                     <Text style={styles.location}>
                         {JSON.stringify(location, 0, 2)}
                     </Text>
                 ) : null}
+                <Text style={styles.instructions}>Extra functions:</Text>
+                <View style={styles.button}>
+                    <Button
+                        title="Open App Settings"
+                        onPress={() => {
+                            GetLocation.openAppSettings();
+                        }}
+                    />
+                </View>
+                <View style={styles.button}>
+                    <Button
+                        title="Open Gps Settings"
+                        onPress={() => {
+                            GetLocation.openGpsSettings();
+                        }}
+                    />
+                </View>
+                <View style={styles.button}>
+                    <Button
+                        title="Open Wifi Settings"
+                        onPress={() => {
+                            GetLocation.openWifiSettings();
+                        }}
+                    />
+                </View>
+                <View style={styles.button}>
+                    <Button
+                        title="Open Mobile Data Settings"
+                        onPress={() => {
+                            GetLocation.openCelularSettings();
+                        }}
+                    />
+                </View>
                 <Text style={styles.instructions}>{instructions}</Text>
             </View>
         );

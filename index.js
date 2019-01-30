@@ -1,25 +1,31 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, Platform, Linking } from 'react-native';
 
 const { OS } = Platform;
-
 const { ReactNativeGetLocation } = NativeModules;
 
-const PREFS_WIFI = 'WIFI';
-const PREFS_MOBILE_DATA = 'MOBILE_DATA_SETTINGS_ID';
-const PREFS_LOCATION_SERVICES = 'LOCATION_SERVICES';
+async function openUrlIfCan(url) {
+    console.log('openUrlIfCan', url);
+    if (await Linking.canOpenURL(url)) {
+        await Linking.openURL(url);
+        return true;
+    }
+    return false;
+}
 
-function openIOSSettings(key) {
-    return Linking.openURL(`App-Prefs:root=${key}`)
-        .catch(ex => {
-            console.warn(ex);
-            return Linking.openURL(`prefs:root=${key}`);
-        }).catch(ex => {
-            console.warn(ex);
-            return Linking.openURL('App-Prefs:');
-        }).catch(ex => {
-            console.warn(ex);
-            return Linking.openURL('prefs:');
-        });
+async function openIOSSettings(root, path = '') {
+    if (await openUrlIfCan(`prefs:root=${root}&path=${path}`)) {
+        return true;
+    }
+    if (await openUrlIfCan(`App-Prefs:root=${root}&path=${path}`)) {
+        return true;
+    }
+    if (await openUrlIfCan('prefs:')) {
+        return true;
+    }
+    if (await openUrlIfCan('App-Prefs:')) {
+        return true;
+    }
+    return false;
 };
 
 export default {
@@ -29,24 +35,42 @@ export default {
     }) {
         return ReactNativeGetLocation.getCurrentPosition(options);
     },
-    openWifiSettings() {
+
+    // Extra functions
+
+    async openWifiSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openWifiSettings();
         }
-        return openIOSSettings(PREFS_WIFI);
+        if (await openIOSSettings('WIFI')) {
+            return true;
+        }
+        return ReactNativeGetLocation.openAppSettings();
     },
-    openCelularSettings() {
+
+    async openCelularSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openCelularSettings();
         }
-        return openIOSSettings(PREFS_MOBILE_DATA);
+        if (await openIOSSettings('MOBILE_DATA_SETTINGS_ID')) {
+            return true;
+        }
+        return ReactNativeGetLocation.openAppSettings();
     },
-    openGpsSettings() {
+
+    async openGpsSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openGpsSettings();
         }
-        return openIOSSettings(PREFS_LOCATION_SERVICES);
+        // if (await openIOSSettings('Privacy', 'LOCATION')) {
+        //     return true;
+        // }
+        if (await openIOSSettings('LOCATION_SERVICE', 'LOCATION')) {
+            return true;
+        }
+        return ReactNativeGetLocation.openAppSettings();
     },
+
     openAppSettings() {
         return ReactNativeGetLocation.openAppSettings();
     }
