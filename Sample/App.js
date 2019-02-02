@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     Platform, StyleSheet, Text, View,
     Button, PermissionsAndroid, Alert,
+    ActivityIndicator,
 } from 'react-native';
 
 import GetLocation from 'react-native-get-location';
@@ -48,63 +49,38 @@ export default class App extends Component {
         loading: false,
     }
 
-    componentDidMount() {
-        this._requestLocationPermission();
-    }
-
-    _onClick = () => {
-        this._requestLocation();
-    }
-
-    _requestLocationPermission = () => {
-        if (OS === 'android') {
-            return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        }
-        navigator.geolocation.requestAuthorization();
-        return Promise.resolve();
-    }
-
     _requestLocation = () => {
-        this._requestLocationPermission()
-            .then(() => {
+        this.setState({ loading: true, location: null });
 
-                this.setState({ loading: true });
-
-                GetLocation.getCurrentPosition({
-                    enableHighAccuracy: true,
-                })
-                    .then(location => {
-                        this.setState({
-                            location,
-                            loading: false,
-                        });
-                    })
-                    .catch(ex => {
-                        const { code, message } = ex;
-                        console.warn(ex, code, message);
-                        if (code === '1') {
-                            // iOS
-                            // Permission Denied or Location Disabled
-                            // Android 
-                            // Location Disabled
-                            Alert.alert('Location not available');
-                        }
-                        if (code === '5') {
-                            // Android
-                            // Permission Denied
-                            Alert.alert('Permission denied');
-                        }
-                        if (code === '3') {
-                            // Android and iOS
-                            // Timeout
-                            Alert.alert('Timeout');
-                        }
-                        this.setState({
-                            location: null,
-                            loading: false,
-                        });
-                    });
-
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 150000,
+        })
+            .then(location => {
+                this.setState({
+                    location,
+                    loading: false,
+                });
+            })
+            .catch(ex => {
+                const { code, message } = ex;
+                console.warn(code, message);
+                if (code === 'CANCELLED') {
+                    Alert.alert('Location cancelled by user or by another request');
+                }
+                if (code === 'UNAVAILABLE') {
+                    Alert.alert('Location service is disabled or unavailable');
+                }
+                if (code === 'TIMEOUT') {
+                    Alert.alert('Location request timed out');
+                }
+                if (code === 'UNAUTHORIZED') {
+                    Alert.alert('Authorization denied');
+                }
+                this.setState({
+                    location: null,
+                    loading: false,
+                });
             });
     }
 
@@ -118,9 +94,12 @@ export default class App extends Component {
                     <Button
                         disabled={loading}
                         title="Get Location"
-                        onPress={this._onClick}
+                        onPress={this._requestLocation}
                     />
                 </View>
+                {loading ? (
+                    <ActivityIndicator />
+                ) : null}
                 {location ? (
                     <Text style={styles.location}>
                         {JSON.stringify(location, 0, 2)}

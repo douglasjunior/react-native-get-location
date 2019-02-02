@@ -4555,10 +4555,8 @@ react-is@^16.6.3:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
   integrity sha512-Z0VRQdF4NPDoI0tsXVMLkJLiwEBa+RP66g0xDHxgxysxSoCUccSten4RTF/UFvZF1dZvZ9Zu1sx+MDXwcOR34g==
 
-react-native-get-location@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-get-location/-/react-native-get-location-0.0.5.tgz#d8d6faf4f27d5ebe73aaedd9aafb498676d175e9"
-  integrity sha512-sgPn4UuLsDAYpnqEz45pYw/AI0Wx9rjEViBCCK9fLgqu0YcKhbNMsOB2dMBTB7cp62wYryJARtY4y31EIxNQRg==
+"react-native-get-location@file:..":
+  version "0.0.10"
 
 react-native@0.57.8:
   version "0.57.8"
@@ -4890,7 +4888,7 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.2:
+rimraf@2.6.3, rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.2:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
   integrity sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==

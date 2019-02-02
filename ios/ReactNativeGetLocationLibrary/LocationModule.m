@@ -1,10 +1,24 @@
+// MIT License
 //
-//  LocationModule.m
-//  GovFacilCidadao
+// Copyright (c) 2019 Douglas Nassif Roma Junior
 //
-//  Created by Douglas Nassif Roma Junior on 25/04/18.
-//  Copyright © 2018 Facebook. All rights reserved.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 #import "LocationModule.h"
 #import <React/RCTLog.h>
@@ -13,21 +27,21 @@
 
 RCT_EXPORT_MODULE(ReactNativeGetLocation);
 
-NSTimer* timer;
+NSTimer* mTimer;
 CLLocationManager* mLocationManager;
 RCTPromiseResolveBlock mResolve;
 RCTPromiseRejectBlock mReject;
+double mTimeout;
 
 RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
                   promise: (RCTPromiseResolveBlock) resolve
                   rejecter: (RCTPromiseRejectBlock) reject) {
   @try {
-    NSLog(@"Location.getCurrentPosition: %@", options);
     dispatch_async(dispatch_get_main_queue(), ^{
       if (mLocationManager != nil) {
         [mLocationManager stopUpdatingLocation];
         if (mReject != nil) {
-          mReject(@"4", @"Location cancelled by another request", nil);
+          mReject(@"CANCELLED", @"Location cancelled by another request", nil);
         }
       }
       
@@ -42,17 +56,12 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
       mResolve = resolve;
       mReject = reject;
       mLocationManager = locationManager;
+      mTimeout = timeout;
       
-      [locationManager requestWhenInUseAuthorization];
-      [locationManager startUpdatingLocation];
-      
-      if (timeout > 0) {
-        NSTimeInterval timeoutInterval = timeout / 1000.0;
-        timer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
-                                                 target:self
-                                               selector:@selector(runTimeout:)
-                                               userInfo:nil
-                                                repeats:NO];
+      if ([self isAuthorized]) {
+        [self startUpdatingLocation];
+      } else {
+        [locationManager requestWhenInUseAuthorization];
       }
     });
   }
@@ -71,10 +80,11 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
 
 RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-  //dispatch_async(dispatch_get_main_queue(), ^{
   @try {
-    [SettingsUtil openAppSettings];
-    resolve(nil);
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [SettingsUtil openAppSettings];
+      resolve(nil);
+    });
   }
   @catch (NSException *exception) {
     NSMutableDictionary * info = [NSMutableDictionary dictionary];
@@ -87,16 +97,14 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
     NSError *error = [[NSError alloc] initWithDomain:@"openAppSettings" code:0 userInfo:info];
     reject(@"openAppSettings", @"Could not open settings.", error);
   }
-  //});
 }
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
   [manager stopUpdatingLocation];
-  NSLog(@"Location.didUpdateLocations: %@", locations);
   if (locations.count > 0) {
     if (mResolve != nil) {
-      if (timer != nil) {
-        [timer invalidate];
+      if (mTimer != nil) {
+        [mTimer invalidate];
       }
       
       CLLocation* location = locations[0];
@@ -117,26 +125,40 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
   [manager stopUpdatingLocation];
-  NSLog(@"Location.didFailWithError: %@", error);
-  if (timer != nil) {
-    [timer invalidate];
+  if (mTimer != nil) {
+    [mTimer invalidate];
   }
   if (mReject != nil) {
-    mReject(@"1", @"Location not available", error);
+    mReject(@"UNAVAILABLE", @"Location not available", error);
   }
   [self clearReferences];
 }
 
 - (void) runTimeout:(id)sender {
-  if (timer != nil) {
-    [timer invalidate];
+  if (mTimer != nil) {
+    [mTimer invalidate];
   }
   if (mLocationManager != nil) {
     [mLocationManager stopUpdatingLocation];
   }
   if (mReject != nil) {
-    mReject(@"3", @"Location timed out", nil);
+    mReject(@"TIMEOUT", @"Location timed out", nil);
   }
+  [self clearReferences];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+  NSLog(@"didChangeAuthorizationStatus %d", status);
+  if ([self authorizationDenied]) {
+    [self rejecAuthorizationDenied];
+  }
+  if ([self isAuthorized]) {
+    [self startUpdatingLocation];
+  }
+}
+
+- (void) rejecAuthorizationDenied {
+  mReject(@"UNAUTHORIZED", @"Authorization denied", nil);
   [self clearReferences];
 }
 
@@ -144,7 +166,34 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
   mResolve = nil;
   mReject = nil;
   mLocationManager = nil;
-  timer = nil;
+  mTimer = nil;
+  mTimeout = 0;
+}
+
+- (void) startUpdatingLocation {
+  [mLocationManager startUpdatingLocation];
+  
+  if (mTimeout > 0) {
+    NSTimeInterval timeoutInterval = mTimeout / 1000.0;
+    mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
+                                             target:self
+                                           selector:@selector(runTimeout:)
+                                           userInfo:nil
+                                            repeats:NO];
+  }
+}
+
+- (BOOL) authorizationDenied {
+  int authorizationStatus = [CLLocationManager authorizationStatus];
+  
+  return authorizationStatus == kCLAuthorizationStatusDenied;
+}
+
+- (BOOL) isAuthorized {
+  int authorizationStatus = [CLLocationManager authorizationStatus];
+  
+  return authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse
+  || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways;
 }
 
 @end

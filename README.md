@@ -86,7 +86,7 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
 
 **Properties:**
    - `enableHighAccuracy`: Set `true` to use 'fine location' (GPS) our `false` to use 'course location' (Wifi, Bluetooth, 3G).
-   - `timeout`: The max time (in seconds) that you want to wait for a location.
+   - `timeout`: The max time (in milliseconds) that you want to wait to receive a location.
 
 ### Object `Location`
 
@@ -99,6 +99,15 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
    - `time`: *(Android only)* The UTC time of this fix, in milliseconds since January 1, 1970.
    - `bearing`: *(Android only)* The bearing, in degrees.
    - `provider`: *(Android only)* The name of the provider that generated this fix.
+
+### Error codes
+
+|Code|Message|
+|-|-|
+|`CANCELLED`|Location cancelled by user or by another request|
+|`UNAVAILABLE`|Location service is disabled or unavailable|
+|`TIMEOUT`|Location request timed out|
+|`UNAUTHORIZED`|Authorization denied|
 
 ## Contribute
 
