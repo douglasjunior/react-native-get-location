@@ -29,11 +29,11 @@ import {
 
 import LocationError from './LocationError';
 
-const { OS, Version } = Platform;
+const { OS } = Platform;
+const Version = parseInt(Platform.Version);
 const { ReactNativeGetLocation } = NativeModules;
 
 async function openUrlIfCan(url) {
-    console.log('openUrlIfCan', url);
     if (await Linking.canOpenURL(url)) {
         await Linking.openURL(url);
         return true;
@@ -42,20 +42,11 @@ async function openUrlIfCan(url) {
 }
 
 async function openIOSSettings(root, path = '') {
-    if (Version >= 10) {
-        if (await openUrlIfCan(`App-Prefs:root=${root}&path=${path}`)) {
-            return true;
-        }
-        if (await openUrlIfCan('App-Prefs:')) {
-            return true;
-        }
-    } else {
-        if (await openUrlIfCan(`prefs:root=${root}&path=${path}`)) {
-            return true;
-        }
-        if (await openUrlIfCan('prefs:')) {
-            return true;
-        }
+    if (await openUrlIfCan(`App-Prefs:root=${root}${path ? `&path=${path}` : ''}`)) {
+        return true;
+    }
+    if (await openUrlIfCan('App-Prefs:')) {
+        return true;
     }
     return false;
 };
@@ -92,45 +83,58 @@ export default {
 
     // Extra functions
 
+    openAppSettings() {
+        return ReactNativeGetLocation.openAppSettings();
+    },
+
+    /**
+     * Only for Android
+     */
     async openWifiSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openWifiSettings();
         }
+
         if (await openIOSSettings('WIFI')) {
             return true;
         }
+
         return ReactNativeGetLocation.openAppSettings();
     },
 
+    /**
+     * Only for Android
+     */
     async openCelularSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openCelularSettings();
         }
+
         if (await openIOSSettings('MOBILE_DATA_SETTINGS_ID')) {
             return true;
         }
+
         return ReactNativeGetLocation.openAppSettings();
     },
 
+    /**
+     * Only for Android
+     */
     async openGpsSettings() {
         if (OS === 'android') {
             return ReactNativeGetLocation.openGpsSettings();
         }
 
-        if (Version < 10) {
-            if (await openIOSSettings('LOCATION_SERVICES')) {
+        if (Version >= 10) {
+            if (await openIOSSettings('Privacy', 'LOCATION')) {
                 return true;
             }
         } else {
-            if (await openIOSSettings('Privacy', 'LOCATION')) {
+            if (await openIOSSettings('LOCATION_SERVICES')) {
                 return true;
             }
         }
 
         return ReactNativeGetLocation.openAppSettings();
     },
-
-    openAppSettings() {
-        return ReactNativeGetLocation.openAppSettings();
-    }
 };
