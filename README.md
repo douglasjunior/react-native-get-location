@@ -37,13 +37,9 @@ For Android API < 23 you need to define the location permissions on `AndroidMani
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 ```
 
-For Android API >= 23, you need to ask for permission in runtime. You can use the React Native [PermissionsAndroid API](https://facebook.github.io/react-native/docs/permissionsandroid) or a universal library like [react-native-permissions](https://github.com/yonahforst/react-native-permissions).
-
 ## iOS post install
 
 You need to define the permission [NSLocationWhenInUseUsageDescription](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW26) on `Info.plist`.
-
-Also, you need to ask for permissions in runtime. You can use the React Native [Geolocation API](https://facebook.github.io/react-native/docs/geolocation) or a universal library like [react-native-permissions](https://github.com/yonahforst/react-native-permissions).
 
 ```xml
 <key>NSLocationWhenInUseUsageDescription</key>
