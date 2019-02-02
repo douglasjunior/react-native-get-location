@@ -51,7 +51,7 @@ You need to define the permission [NSLocationWhenInUseUsageDescription](https://
 There is only one function that you need to use to get the user's current location.
 
 ```js
-import GetLocation from 'react-native-keyboard-manager'
+import GetLocation from 'react-native-get-location'
 
 GetLocation.getCurrentPosition({
     enableHighAccuracy: true,
