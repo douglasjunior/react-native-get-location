@@ -12,7 +12,7 @@
 - React >= 16.0.0-alpha.8
 - iOS >= 8.0
 
-## Install with `react-native link`:
+## Install
 
 1. Install dependency package
     ```bash
@@ -33,7 +33,10 @@
 For Android API < 23 you need to define the location permissions on `AndroidManifest.xml`.
 
 ```xml
+<!-- Define ACCESS_FINE_LOCATION if you will use enableHighAccuracy=true  -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+<!-- Define ACCESS_COARSE_LOCATION if you will use enableHighAccuracy=false  -->
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 ```
 
