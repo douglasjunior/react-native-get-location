@@ -68,12 +68,15 @@ public class GetLocation {
             Log.d("Location", String.format("getBestProvider: %b", locationManager.getBestProvider(criteria, true)));
 
             listener = new LocationListener() {
+                private boolean locationFound = false;
+
                 @Override
-                public void onLocationChanged(Location location) {
-                    cancelTimer();
+                public synchronized void onLocationChanged(Location location) {
                     Log.d("Location", String.format("onLocationChanged: %b", location));
-                    if (location != null) {
-                        locationManager.removeUpdates(listener);
+                    if (location != null && !locationFound) {
+                        locationFound = true;
+                        cancelTimer();
+                        locationManager.removeUpdates(this);
                         WritableNativeMap resultLocation = new WritableNativeMap();
                         resultLocation.putString("provider", location.getProvider());
                         resultLocation.putDouble("latitude", location.getLatitude());
