@@ -38,12 +38,7 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
                   rejecter: (RCTPromiseRejectBlock) reject) {
   @try {
     dispatch_async(dispatch_get_main_queue(), ^{
-      if (mLocationManager != nil) {
-        [mLocationManager stopUpdatingLocation];
-        if (mReject != nil) {
-          mReject(@"CANCELLED", @"Location cancelled by another request", nil);
-        }
-      }
+      [self cancelPreviousRequest];
       
       bool enableHighAccuracy = [RCTConvert BOOL:options[@"enableHighAccuracy"]];
       double timeout = [RCTConvert double:options[@"timeout"]];
@@ -74,7 +69,7 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
     [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
     
     NSError *error = [[NSError alloc] initWithDomain:@"Location not available." code:1 userInfo:info];
-    reject(@"1", @"Location not available", error);
+    reject(@"UNAVAILABLE", @"Location not available", error);
   }
 }
 
@@ -101,26 +96,27 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
   [manager stopUpdatingLocation];
-  if (locations.count > 0) {
-    if (mResolve != nil) {
-      if (mTimer != nil) {
-        [mTimer invalidate];
-      }
-      
-      CLLocation* location = locations[0];
-      
-      NSDictionary* locationResult = @{
-                                       @"latitude": @(location.coordinate.latitude),
-                                       @"longitude": @(location.coordinate.longitude),
-                                       @"altitude": @(location.altitude),
-                                       @"speed": @(location.speed),
-                                       @"accuracy": @(location.verticalAccuracy),
-                                       };
-      
-      mResolve(locationResult);
+  if (locations.count > 0 && mResolve != nil) {
+    if (mTimer != nil) {
+      [mTimer invalidate];
     }
-    [self clearReferences];
+    
+    CLLocation* location = locations[0];
+    
+    NSDictionary* locationResult = @{
+                                     @"latitude": @(location.coordinate.latitude),
+                                     @"longitude": @(location.coordinate.longitude),
+                                     @"altitude": @(location.altitude),
+                                     @"speed": @(location.speed),
+                                     @"accuracy": @(location.horizontalAccuracy),
+                                     @"time": @(location.timestamp.timeIntervalSince1970),
+                                     @"verticalAccuracy": @(location.verticalAccuracy),
+                                     @"course": @(location.course),
+                                     };
+    
+    mResolve(locationResult);
   }
+  [self clearReferences];
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
@@ -148,18 +144,12 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-  NSLog(@"didChangeAuthorizationStatus %d", status);
-  if ([self authorizationDenied]) {
-    [self rejecAuthorizationDenied];
-  }
   if ([self isAuthorized]) {
     [self startUpdatingLocation];
+  } else if ([self isAuthorizationDenied]) {
+    mReject(@"UNAUTHORIZED", @"Authorization denied", nil);
+    [self clearReferences];
   }
-}
-
-- (void) rejecAuthorizationDenied {
-  mReject(@"UNAUTHORIZED", @"Authorization denied", nil);
-  [self clearReferences];
 }
 
 - (void) clearReferences {
@@ -170,20 +160,30 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
   mTimeout = 0;
 }
 
+- (void) cancelPreviousRequest {
+  if (mLocationManager != nil) {
+    [mLocationManager stopUpdatingLocation];
+    if (mReject != nil) {
+      mReject(@"CANCELLED", @"Location cancelled by another request", nil);
+    }
+  }
+  [self clearReferences];
+}
+
 - (void) startUpdatingLocation {
   [mLocationManager startUpdatingLocation];
   
   if (mTimeout > 0) {
     NSTimeInterval timeoutInterval = mTimeout / 1000.0;
     mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
-                                             target:self
-                                           selector:@selector(runTimeout:)
-                                           userInfo:nil
-                                            repeats:NO];
+                                              target:self
+                                            selector:@selector(runTimeout:)
+                                            userInfo:nil
+                                             repeats:NO];
   }
 }
 
-- (BOOL) authorizationDenied {
+- (BOOL) isAuthorizationDenied {
   int authorizationStatus = [CLLocationManager authorizationStatus];
   
   return authorizationStatus == kCLAuthorizationStatusDenied;

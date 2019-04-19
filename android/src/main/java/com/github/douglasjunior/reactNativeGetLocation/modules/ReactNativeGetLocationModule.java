@@ -51,6 +51,7 @@ public class ReactNativeGetLocationModule extends ReactContextBaseJavaModule {
     public static final String NAME = "ReactNativeGetLocation";
 
     private LocationManager locationManager;
+    private GetLocation getLocation;
 
     public ReactNativeGetLocationModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -108,7 +109,11 @@ public class ReactNativeGetLocationModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getCurrentPosition(ReadableMap options, Promise promise) {
-        new GetLocation(locationManager).get(options, promise);
+        if (getLocation != null) {
+            getLocation.cancel();
+        }
+        getLocation = new GetLocation(locationManager);
+        getLocation.get(options, promise);
     }
 
 }

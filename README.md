@@ -94,9 +94,11 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
    - `altitude`: The altitude if available, in meters above the WGS 84 reference ellipsoid.
    - `accuracy`: The estimated horizontal accuracy of this location, radial, in meters.
    - `speed`: The speed if it is available, in meters/second over ground.
-   - `time`: *(Android only)* The UTC time of this fix, in milliseconds since January 1, 1970.
+   - `time`: The UTC time of this fix, in milliseconds since January 1, 1970.
    - `bearing`: *(Android only)* The bearing, in degrees.
    - `provider`: *(Android only)* The name of the provider that generated this fix.
+   - `verticalAccuracy`: *(iOS only)* The vertical accuracy of the location. Negative if the altitude is invalid.
+   - `course`: *(iOS only)* The course of the location in degrees true North. Negative if course is invalid. (0.0 - 359.9 degrees, 0 being true North)
 
 ### Error codes
 
