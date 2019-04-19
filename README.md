@@ -9,7 +9,6 @@
 ## Requirements
 
 - React Native >= 0.45.0
-- React >= 16.0.0-alpha.8
 - iOS >= 8.0
 
 ## Install
