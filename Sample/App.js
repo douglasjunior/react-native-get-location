@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import {
     Platform, StyleSheet, Text, View,
-    Button, PermissionsAndroid, Alert,
+    Button, Alert,
     ActivityIndicator,
 } from 'react-native';
 
 import GetLocation from 'react-native-get-location';
-
-const { OS } = Platform;
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
