@@ -13,7 +13,7 @@
 
 ## Install
 
-1. Install dependency package
+Install dependency package
     ```bash
     yarn add react-native-get-location
     ```
@@ -22,7 +22,11 @@
     npm i -S react-native-get-location
     ```
 
-2. Link the native project
+> If you are using `React Native 0.60.+` [the link should happen automatically](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md).
+
+## Link with `react-native link`
+
+Link the native project
     ```bash
     react-native link react-native-get-location
     ```
