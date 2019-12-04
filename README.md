@@ -14,22 +14,22 @@
 ## Install
 
 Install dependency package
-    ```bash
-    yarn add react-native-get-location
-    ```
-    Or
-    ```bash
-    npm i -S react-native-get-location
-    ```
+```bash
+yarn add react-native-get-location
+```
+Or
+```bash
+npm i -S react-native-get-location
+```
 
 > If you are using `React Native 0.60.+` [the link should happen automatically](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md).
 
 ## Link with `react-native link`
 
 Link the native project
-    ```bash
-    react-native link react-native-get-location
-    ```
+```bash
+react-native link react-native-get-location
+```
 
 ## Android post install
 
