@@ -28,7 +28,8 @@ If not, use one of the following method to link.
 
 ## Link with `react-native link`
 
-Link the native project
+If you are using `React Native <= 0.59.X`, link the native project:
+
 ```bash
 react-native link react-native-get-location
 ```
