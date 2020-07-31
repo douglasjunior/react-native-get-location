@@ -29,5 +29,6 @@
   "homepage": "https://github.com/douglasjunior/react-native-get-location",
   "peerDependencies": {
     "react-native": ">=0.44"
-  }
+  },
+  "types": "./index.d.ts"
 }
