@@ -1,5 +1,5 @@
 declare module "react-native-get-location" {
-  export interface Location {
+  export class Location {
     latitude: number;
     longitude: number;
     altitude: number;
@@ -14,6 +14,11 @@ declare module "react-native-get-location" {
   export interface GetCurrentPositionOptions {
     enableHighAccuracy: boolean;
     timeout: number;
+  }
+
+  export class LocationError extends Error {
+    name: string;
+    code: string;
   }
 
   export function getCurrentPosition(
