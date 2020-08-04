@@ -16,9 +16,15 @@ declare module "react-native-get-location" {
     timeout: number;
   }
 
+  export type LocationErrorCode =
+    | "CANCELLED"
+    | "UNAVAILABLE"
+    | "TIMEOUT"
+    | "UNAUTHORIZED";
+
   export class LocationError extends Error {
     name: string;
-    code: string;
+    code: LocationErrorCode;
   }
 
   export function getCurrentPosition(
