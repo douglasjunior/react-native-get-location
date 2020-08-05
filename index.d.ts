@@ -23,7 +23,6 @@ declare module "react-native-get-location" {
     | "UNAUTHORIZED";
 
   export class LocationError extends Error {
-    name: string;
     code: LocationErrorCode;
   }
 
