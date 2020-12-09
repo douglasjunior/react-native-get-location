@@ -109,7 +109,7 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
                                      @"altitude": @(location.altitude),
                                      @"speed": @(location.speed),
                                      @"accuracy": @(location.horizontalAccuracy),
-                                     @"time": @(location.timestamp.timeIntervalSince1970),
+                                     @"time": @(location.timestamp.timeIntervalSince1970 * 1000),
                                      @"verticalAccuracy": @(location.verticalAccuracy),
                                      @"course": @(location.course),
                                      };
