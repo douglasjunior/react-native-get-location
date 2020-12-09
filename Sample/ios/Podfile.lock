@@ -217,7 +217,7 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - ReactNativeGetLocation (1.2.0):
+  - ReactNativeGetLocation (1.4.3):
     - React
   - Yoga (1.14.0)
 
@@ -336,9 +336,9 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  ReactNativeGetLocation: 01546a9ba77c22f378c042e157f77d7777a78483
+  ReactNativeGetLocation: 1e71f6f2024a4215874998bee0e5f31d90a6dbe7
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: ca5edbb15be0d955497b4dbe0398fb2a6c0eb191
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.10.0
