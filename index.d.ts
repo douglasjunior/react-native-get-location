@@ -32,5 +32,5 @@ export class LocationError extends Error {
 }
 
 export default class GetLocation {
-  getCurrentPosition(options: GetCurrentPositionOptions): Promise<Location>;
+  static getCurrentPosition(options: GetCurrentPositionOptions): Promise<Location>;
 }
