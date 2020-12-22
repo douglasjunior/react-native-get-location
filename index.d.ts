@@ -27,10 +27,10 @@ export class LocationError extends Error {
   code: LocationErrorCode;
 }
 
-function getCurrentPosition(
-  options: GetCurrentPositionOptions
-): Promise<Location>;
+export class LocationError extends Error {
+  code: LocationErrorCode;
+}
 
-export default {
-  getCurrentPosition
+export default class GetLocation {
+  getCurrentPosition(options: GetCurrentPositionOptions): Promise<Location>;
 }
