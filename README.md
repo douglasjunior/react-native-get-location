@@ -8,8 +8,8 @@
 
 ## Requirements
 
-- React Native >= 0.45.0
-- iOS >= 8.0
+- React Native >= 0.60.0
+- iOS >= 9.0
 
 ## Install
 
@@ -22,17 +22,7 @@ Or
 npm i -S react-native-get-location
 ```
 
-If you are using `React Native 0.60.+` go to the folder **your-project/ios** and run `pod install`, and you're done. 
-
-If not, use one of the following method to link.
-
-## Link with `react-native link`
-
-If you are using `React Native <= 0.59.X`, link the native project:
-
-```bash
-react-native link react-native-get-location
-```
+Go to the folder **your-project/ios** and run `pod install`, and you're done. 
 
 ## Android post install
 

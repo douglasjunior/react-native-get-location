@@ -461,7 +461,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0608E427DE8098EF99107792 /* Pods-ReactNativeGetLocationSample-ReactNativeGetLocationSampleTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 8MC93BX3R2;
@@ -493,7 +492,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 972A3EE920615777B5279893 /* Pods-ReactNativeGetLocationSample-ReactNativeGetLocationSampleTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
