@@ -337,7 +337,7 @@ PODS:
     - React-jsi (= 0.66.3)
     - React-logger (= 0.66.3)
     - React-perflogger (= 0.66.3)
-  - ReactNativeGetLocation (2.1.2):
+  - ReactNativeGetLocation (2.2.1):
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -523,7 +523,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 50cfe7049167cfc7e83ac5542c6fff0c76791a9b
   React-runtimeexecutor: bbbdb3d8fcf327c6e2249ee71b6ef1764b7dc266
   ReactCommon: 9bac022ab71596f2b0fde1268272543184c63971
-  ReactNativeGetLocation: 3bc33ae8cbe026ed49d4cdac6a1d3e9691394e64
+  ReactNativeGetLocation: d6b15cb2a2023ab7703f756501bad86d3ecf6fea
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
