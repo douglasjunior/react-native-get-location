@@ -9,13 +9,13 @@ Pod::Spec.new do |s|
 	s.version        = version
 	s.description    = packageJson["description"]
 	s.homepage       = packageJson["homepage"]
-	s.summary        = "Simple to use React Native library to get device location"
+	s.summary        = packageJson["description"]
 	s.license        = packageJson["license"]
-	s.authors        = packageJson["author"]["name"]
+	s.authors        = packageJson["author"]
 	s.source         = { :git => repository, :tag => version }
 	s.platform       = :ios, "9.0"
 	s.preserve_paths = 'README.md', 'package.json', '*.js'
 	s.source_files   = 'ios/ReactNativeGetLocationLibrary/**/*.{h,m}'
 
-	s.dependency 'React'
+	s.dependency 'React-Core'
 end
