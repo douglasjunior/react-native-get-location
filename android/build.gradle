@@ -22,8 +22,6 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-    ndkVersion safeExtGet('ndkVersion', '21.4.7075529')
-
     compileSdkVersion safeExtGet('compileSdkVersion', 30)
     //noinspection GradleDependency
     buildToolsVersion safeExtGet('buildToolsVersion', '30.0.2')
