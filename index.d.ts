@@ -79,22 +79,22 @@ export default class GetLocation {
   static getCurrentPosition(options: GetCurrentPositionOptions): Promise<Location>;
 
   /**
-   * @Deprecated use Linking.openSettings from React Native 
+   * @deprecated use Linking.openSettings from React Native 
    */
   static openAppSettings();
 
   /**
-   * @Deprecated use Linking.openSettings from React Native 
+   * @deprecated use Linking.openSettings from React Native 
    */
   static openWifiSettings();
 
   /**
-   * @Deprecated use Linking.openSettings from React Native 
+   * @deprecated use Linking.openSettings from React Native 
    */
   static openCelularSettings();
 
   /**
-   * @Deprecated use Linking.openSettings from React Native 
+   * @deprecated use Linking.openSettings from React Native 
    */
   static openGpsSettings();
 }
