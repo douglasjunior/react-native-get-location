@@ -61,6 +61,11 @@ function App(): JSX.Element {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 30000,
+      rationale: {
+        title: 'Location permission',
+        message: 'The app needs the permission to request your location.',
+        buttonPositive: 'Ok',
+      },
     })
       .then(newLocation => {
         setLoading(false);
@@ -102,8 +107,6 @@ function App(): JSX.Element {
         <Button
           title="Open App Settings"
           onPress={() => {
-            // @ts-ignore
-            // experimental
             GetLocation.openAppSettings();
           }}
         />
@@ -112,8 +115,6 @@ function App(): JSX.Element {
         <Button
           title="Open Gps Settings"
           onPress={() => {
-            // @ts-ignore
-            // experimental
             GetLocation.openGpsSettings();
           }}
         />
@@ -122,8 +123,6 @@ function App(): JSX.Element {
         <Button
           title="Open Wifi Settings"
           onPress={() => {
-            // @ts-ignore
-            // experimental
             GetLocation.openWifiSettings();
           }}
         />
@@ -132,8 +131,6 @@ function App(): JSX.Element {
         <Button
           title="Open Mobile Data Settings"
           onPress={() => {
-            // @ts-ignore
-            // experimental
             GetLocation.openCelularSettings();
           }}
         />
