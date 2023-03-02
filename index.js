@@ -29,6 +29,8 @@ import {
 
 import LocationError from './LocationError';
 
+export { default as LocationError } from './LocationError';
+
 const { OS } = Platform;
 const Version = parseInt(Platform.Version);
 const { ReactNativeGetLocation } = NativeModules;
@@ -51,11 +53,14 @@ async function openIOSSettings(root, path = '') {
     return false;
 };
 
-async function requestAndroidPermission(enableHighAccuracy = false) {
+async function requestAndroidPermission(enableHighAccuracy = false, rationale = undefined) {
     const { PERMISSIONS, RESULTS } = PermissionsAndroid;
-    const granted = await PermissionsAndroid.request(enableHighAccuracy
-        ? PERMISSIONS.ACCESS_FINE_LOCATION
-        : PERMISSIONS.ACCESS_COARSE_LOCATION);
+    const granted = await PermissionsAndroid.request(
+        enableHighAccuracy
+            ? PERMISSIONS.ACCESS_FINE_LOCATION
+            : PERMISSIONS.ACCESS_COARSE_LOCATION,
+        rationale,
+    );
     if (granted !== RESULTS.GRANTED) {
         throw new LocationError('UNAUTHORIZED', 'Authorization denied');
     }
@@ -66,9 +71,10 @@ export default {
     async getCurrentPosition(options = {
         enableHighAccuracy: false,
         timeout: 0,
+        rationale: undefined,
     }) {
         if (OS === 'android') {
-            await requestAndroidPermission(options.enableHighAccuracy);
+            await requestAndroidPermission(options.enableHighAccuracy, rationale);
         }
         try {
             const location = await ReactNativeGetLocation.getCurrentPosition(options);
@@ -83,12 +89,15 @@ export default {
 
     // Extra functions
 
+    /**
+     * @Deprecated
+     */
     openAppSettings() {
         return ReactNativeGetLocation.openAppSettings();
     },
 
     /**
-     * Only for Android
+     * @Deprecated
      */
     async openWifiSettings() {
         if (OS === 'android') {
@@ -103,7 +112,7 @@ export default {
     },
 
     /**
-     * Only for Android
+     * @Deprecated
      */
     async openCelularSettings() {
         if (OS === 'android') {
@@ -118,7 +127,7 @@ export default {
     },
 
     /**
-     * Only for Android
+     * @Deprecated
      */
     async openGpsSettings() {
         if (OS === 'android') {

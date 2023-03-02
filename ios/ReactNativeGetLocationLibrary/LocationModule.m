@@ -40,12 +40,16 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
         @try {
             [self cancelPreviousRequest];
             
-            if (![CLLocationManager locationServicesEnabled]) {
-                [[NSException
-                  exceptionWithName:@"Unavailable"
-                  reason:@"Location service is unavailable"
-                  userInfo:nil]
-                 raise];
+            if (@available(iOS 14.0, *)) {
+                // should use locationManagerDidChangeAuthorization
+            } else {
+                if (![CLLocationManager locationServicesEnabled]) {
+                    [[NSException
+                      exceptionWithName:@"Unavailable"
+                      reason:@"Location service is unavailable"
+                      userInfo:nil]
+                     raise];
+                }
             }
             
             bool enableHighAccuracy = [RCTConvert BOOL:options[@"enableHighAccuracy"]];
@@ -61,11 +65,7 @@ RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
             mLocationManager = locationManager;
             mTimeout = timeout;
             
-            if ([self isAuthorized]) {
-                [self startUpdatingLocation];
-            } else {
-                [locationManager requestWhenInUseAuthorization];
-            }
+            [self startUpdatingLocation];
         }
         @catch (NSException *exception) {
             NSMutableDictionary * info = [NSMutableDictionary dictionary];
@@ -103,12 +103,7 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 }
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    [manager stopUpdatingLocation];
     if (locations.count > 0 && mResolve != nil) {
-        if (mTimer != nil) {
-            [mTimer invalidate];
-        }
-        
         CLLocation* location = locations[0];
         
         NSDictionary* locationResult = @{
@@ -128,10 +123,6 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    [manager stopUpdatingLocation];
-    if (mTimer != nil) {
-        [mTimer invalidate];
-    }
     if (mReject != nil) {
         mReject(@"UNAVAILABLE", @"Location not available", error);
     }
@@ -139,12 +130,6 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 }
 
 - (void) runTimeout:(id)sender {
-    if (mTimer != nil) {
-        [mTimer invalidate];
-    }
-    if (mLocationManager != nil) {
-        [mLocationManager stopUpdatingLocation];
-    }
     if (mReject != nil) {
         mReject(@"TIMEOUT", @"Location timed out", nil);
     }
@@ -161,6 +146,12 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 }
 
 - (void) clearReferences {
+    if (mTimer != nil) {
+        [mTimer invalidate];
+    }
+    if (mLocationManager != nil) {
+        [mLocationManager stopUpdatingLocation];
+    }
     mResolve = nil;
     mReject = nil;
     mLocationManager = nil;
@@ -170,15 +161,19 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
 
 - (void) cancelPreviousRequest {
     if (mLocationManager != nil) {
-        [mLocationManager stopUpdatingLocation];
-        if (mReject != nil) {
-            mReject(@"CANCELLED", @"Location cancelled by another request", nil);
-        }
+        mReject(@"CANCELLED", @"Location cancelled by another request", nil);
     }
     [self clearReferences];
 }
 
 - (void) startUpdatingLocation {
+    if (![self isAuthorized]) {
+        NSLog(@"[locationManager requestWhenInUseAuthorization]");
+        [mLocationManager requestWhenInUseAuthorization];
+        return;
+    }
+    
+    NSLog(@"[locationManager startUpdatingLocation]");
     [mLocationManager startUpdatingLocation];
     
     if (mTimeout > 0) {
@@ -188,6 +183,35 @@ RCT_EXPORT_METHOD(openAppSettings: (RCTPromiseResolveBlock)resolve
                                                 selector:@selector(runTimeout:)
                                                 userInfo:nil
                                                  repeats:NO];
+    }
+}
+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+    if (@available(iOS 14.0, *)) {
+        if (![CLLocationManager locationServicesEnabled]) {
+            mReject(@"UNAVAILABLE", @"Location not available", nil);
+            [self clearReferences];
+            return;
+        }
+        
+        switch ([manager authorizationStatus]) {
+            case kCLAuthorizationStatusAuthorizedAlways:
+            case kCLAuthorizationStatusAuthorizedWhenInUse: {
+                [self startUpdatingLocation];
+                break;
+            }
+            case kCLAuthorizationStatusNotDetermined: {
+                // do nothing
+                break;
+            }
+            case kCLAuthorizationStatusDenied:
+            case kCLAuthorizationStatusRestricted:
+            default: {
+                mReject(@"UNAUTHORIZED", @"Authorization denied", nil);
+                [self clearReferences];
+                break;
+            }
+        }
     }
 }
 

@@ -5,11 +5,15 @@ import {
   Text,
   View,
   Button,
-  Alert,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 
-import GetLocation, {Location} from 'react-native-get-location';
+import GetLocation, {
+  Location,
+  LocationError,
+  LocationErrorCode,
+} from 'react-native-get-location';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -47,10 +51,12 @@ const styles = StyleSheet.create({
 function App(): JSX.Element {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | null>(null);
+  const [error, setError] = useState<LocationErrorCode | null>(null);
 
   const requestLocation = () => {
     setLoading(true);
     setLocation(null);
+    setError(null);
 
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -61,19 +67,12 @@ function App(): JSX.Element {
         setLocation(newLocation);
       })
       .catch(ex => {
-        const {code, message} = ex;
-        console.warn(code, message);
-        if (code === 'CANCELLED') {
-          Alert.alert('Location cancelled by user or by another request');
-        }
-        if (code === 'UNAVAILABLE') {
-          Alert.alert('Location service is disabled or unavailable');
-        }
-        if (code === 'TIMEOUT') {
-          Alert.alert('Location request timed out');
-        }
-        if (code === 'UNAUTHORIZED') {
-          Alert.alert('Authorization denied');
+        if (ex instanceof LocationError) {
+          const {code, message} = ex;
+          console.warn(code, message);
+          setError(code);
+        } else {
+          console.warn(ex);
         }
         setLoading(false);
         setLocation(null);
@@ -97,6 +96,7 @@ function App(): JSX.Element {
       {location ? (
         <Text style={styles.location}>{JSON.stringify(location, null, 2)}</Text>
       ) : null}
+      {error ? <Text style={styles.location}>Error: {error}</Text> : null}
       <Text style={styles.instructions}>Extra functions:</Text>
       <View style={styles.button}>
         <Button
@@ -135,6 +135,14 @@ function App(): JSX.Element {
             // @ts-ignore
             // experimental
             GetLocation.openCelularSettings();
+          }}
+        />
+      </View>
+      <View style={styles.button}>
+        <Button
+          title="Open Linking Settings"
+          onPress={() => {
+            Linking.openSettings();
           }}
         />
       </View>
