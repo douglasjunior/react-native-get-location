@@ -55,6 +55,7 @@ async function openIOSSettings(root, path = '') {
 
 async function requestAndroidPermission(enableHighAccuracy = false, rationale = undefined) {
     const { PERMISSIONS, RESULTS } = PermissionsAndroid;
+
     const granted = await PermissionsAndroid.request(
         enableHighAccuracy
             ? PERMISSIONS.ACCESS_FINE_LOCATION
@@ -74,7 +75,7 @@ export default {
         rationale: undefined,
     }) {
         if (OS === 'android') {
-            await requestAndroidPermission(options.enableHighAccuracy, rationale);
+            await requestAndroidPermission(options.enableHighAccuracy, options.rationale);
         }
         try {
             const location = await ReactNativeGetLocation.getCurrentPosition(options);
