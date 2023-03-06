@@ -82,7 +82,7 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
 **Properties:**
    - `enableHighAccuracy`: Set `true` to use 'fine location' (GPS) our `false` to use 'course location' (Wifi, Bluetooth, 3G).
    - `timeout`: The max time (in milliseconds) that you want to wait to receive a location.
-   - `rationale`: (Android only) See the [React Native docs](https://reactnative.dev/docs/permissionsandroid#request).
+   - `rationale?`: (Android only) See the [React Native docs](https://reactnative.dev/docs/permissionsandroid#request).
 
 ### Object `Location`
 
