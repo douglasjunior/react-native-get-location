@@ -1,6 +1,6 @@
 # React-Native Get Location
 
-[![Licence MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/douglasjunior/react-native-get-location/blob/master/LICENSE)
+[![License MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/douglasjunior/react-native-get-location/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/react-native-get-location.svg)](https://www.npmjs.com/package/react-native-get-location)
 [![npm downloads](https://img.shields.io/npm/dt/react-native-get-location.svg)](#install-with-react-native-link)
 
@@ -118,7 +118,7 @@ New features, bug fixes and improvements are welcome! For questions and suggesti
 
 [![Star History Chart](https://api.star-history.com/svg?repos=douglasjunior/react-native-get-location&type=Date)](https://star-history.com/#douglasjunior/react-native-get-location)
 
-## Licence
+## License
 
 ```
 The MIT License (MIT)
@@ -126,4 +126,4 @@ The MIT License (MIT)
 Copyright (c) 2019 Douglas Nassif Roma Junior
 ```
 
-See the full [licence file](https://github.com/douglasjunior/react-native-get-location/blob/master/LICENSE).
+See the full [license file](https://github.com/douglasjunior/react-native-get-location/blob/master/LICENSE).
