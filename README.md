@@ -65,7 +65,7 @@ GetLocation.getCurrentPosition({
 })
 ```
 
-For more details, see the [Sample Project](https://github.com/douglasjunior/react-native-get-location/blob/master/Sample/App.js).
+For more details, see the [Sample Project](https://github.com/douglasjunior/react-native-get-location/blob/master/Sample/App.tsx).
 
 ## API
 
