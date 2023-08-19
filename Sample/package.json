@@ -7,8 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
-    "postinstall": "rimraf node_modules/react-native-get-location/Sample/"
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "18.2.0",
@@ -30,7 +29,6 @@
     "metro-react-native-babel-preset": "0.73.7",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
-    "rimraf": "4.1.2",
     "typescript": "4.8.4"
   },
   "jest": {

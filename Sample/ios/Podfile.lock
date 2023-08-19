@@ -413,7 +413,7 @@ PODS:
     - React-jsi (= 0.71.3)
     - React-logger (= 0.71.3)
     - React-perflogger (= 0.71.3)
-  - ReactNativeGetLocation (2.2.1):
+  - ReactNativeGetLocation (3.0.1):
     - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
@@ -619,11 +619,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: 5199a180d04873366a83855de55ac33ce60fe4d5
   React-runtimeexecutor: 7bf0dafc7b727d93c8cb94eb00a9d3753c446c3e
   ReactCommon: 6f65ea5b7d84deb9e386f670dd11ce499ded7b40
-  ReactNativeGetLocation: d6b15cb2a2023ab7703f756501bad86d3ecf6fea
+  ReactNativeGetLocation: d8e41c5d499fd26f308502405cadb1f59e6179d6
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 5ed1699acbba8863755998a4245daa200ff3817b
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 75976164cf265540fe76372458a39c3d59d7675a
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.12.0

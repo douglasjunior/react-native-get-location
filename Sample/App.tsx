@@ -1,3 +1,27 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2019 Douglas Nassif Roma Junior
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import React, {useState} from 'react';
 import {
   Platform,
@@ -6,13 +30,12 @@ import {
   View,
   Button,
   ActivityIndicator,
-  Linking,
 } from 'react-native';
 
 import GetLocation, {
   Location,
-  LocationError,
   LocationErrorCode,
+  isLocationError,
 } from 'react-native-get-location';
 
 const instructions = Platform.select({
@@ -72,7 +95,7 @@ function App(): JSX.Element {
         setLocation(newLocation);
       })
       .catch(ex => {
-        if (ex instanceof LocationError) {
+        if (isLocationError(ex)) {
           const {code, message} = ex;
           console.warn(code, message);
           setError(code);
@@ -90,6 +113,7 @@ function App(): JSX.Element {
       <Text style={styles.instructions}>
         To get location, press the button:
       </Text>
+
       <View style={styles.button}>
         <Button
           disabled={loading}
@@ -97,52 +121,23 @@ function App(): JSX.Element {
           onPress={requestLocation}
         />
       </View>
+
       {loading ? <ActivityIndicator /> : null}
       {location ? (
         <Text style={styles.location}>{JSON.stringify(location, null, 2)}</Text>
       ) : null}
       {error ? <Text style={styles.location}>Error: {error}</Text> : null}
+
       <Text style={styles.instructions}>Extra functions:</Text>
       <View style={styles.button}>
         <Button
           title="Open App Settings"
           onPress={() => {
-            GetLocation.openAppSettings();
+            GetLocation.openSettings();
           }}
         />
       </View>
-      <View style={styles.button}>
-        <Button
-          title="Open Gps Settings"
-          onPress={() => {
-            GetLocation.openGpsSettings();
-          }}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button
-          title="Open Wifi Settings"
-          onPress={() => {
-            GetLocation.openWifiSettings();
-          }}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button
-          title="Open Mobile Data Settings"
-          onPress={() => {
-            GetLocation.openCelularSettings();
-          }}
-        />
-      </View>
-      <View style={styles.button}>
-        <Button
-          title="Open Linking Settings"
-          onPress={() => {
-            Linking.openSettings();
-          }}
-        />
-      </View>
+
       <Text style={styles.instructions}>{instructions}</Text>
     </View>
   );
