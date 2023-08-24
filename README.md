@@ -2,7 +2,7 @@
 
 [![License MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](https://github.com/douglasjunior/react-native-get-location/blob/master/LICENSE)
 [![npm version](https://img.shields.io/npm/v/react-native-get-location.svg)](https://www.npmjs.com/package/react-native-get-location)
-[![npm downloads](https://img.shields.io/npm/dt/react-native-get-location.svg)](#install-with-react-native-link)
+[![npm downloads](https://img.shields.io/npm/dt/react-native-get-location.svg)](https://www.npmjs.com/package/react-native-get-location?activeTab=versions)
 
 ⚛ Simple to use React Native library to get native device location for Android and iOS.
 
