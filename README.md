@@ -26,7 +26,7 @@ Go to the folder **your-project/ios** and run `pod install`, and you're done.
 
 ## Android post install
 
-For Android API < 23 you need to define the location permissions on `AndroidManifest.xml`.
+For Android you need to define the location permissions on `AndroidManifest.xml`.
 
 ```xml
 <!-- Define ACCESS_FINE_LOCATION if you will use enableHighAccuracy=true  -->
