@@ -22,9 +22,11 @@
  * SOFTWARE.
  */
 
-import {PermissionsAndroid, Rationale} from 'react-native';
+import { PermissionsAndroid, Rationale } from 'react-native';
 
 import LocationError from './LocationError';
+
+const { PERMISSIONS, RESULTS } = PermissionsAndroid;
 
 export type Location = {
   /**
@@ -93,14 +95,15 @@ export async function requestAndroidPermission(
   enableHighAccuracy: boolean = false,
   rationale?: Rationale,
 ) {
-  const {PERMISSIONS, RESULTS} = PermissionsAndroid;
+  const permission = enableHighAccuracy
+    ? PERMISSIONS.ACCESS_FINE_LOCATION
+    : PERMISSIONS.ACCESS_COARSE_LOCATION
 
-  const granted = await PermissionsAndroid.request(
-    enableHighAccuracy
-      ? PERMISSIONS.ACCESS_FINE_LOCATION
-      : PERMISSIONS.ACCESS_COARSE_LOCATION,
-    rationale,
-  );
+  const alreadyGranted = await PermissionsAndroid.check(permission);
+
+  if (alreadyGranted) return true;
+
+  const granted = await PermissionsAndroid.request(permission, rationale);
 
   if (granted !== RESULTS.GRANTED) {
     throw new LocationError('UNAUTHORIZED', 'Authorization denied');
