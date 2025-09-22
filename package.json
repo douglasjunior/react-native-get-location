@@ -28,6 +28,9 @@
     "url": "https://github.com/douglasjunior/react-native-get-location/issues"
   },
   "homepage": "https://github.com/douglasjunior/react-native-get-location",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "codegenConfig": {
     "name": "rngetlocation_codegen",
     "type": "modules",
