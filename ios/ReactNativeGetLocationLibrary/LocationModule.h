@@ -20,11 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#else
+
 #import <React/RCTBridgeModule.h>
 #import <React/RCTConvert.h>
 #import <CoreLocation/CoreLocation.h>
-#import "SettingsUtil.h"
+#import "LocationModuleImpl.h"
 
 @interface LocationModule : NSObject <RCTBridgeModule, CLLocationManagerDelegate>
 
 @end
+
+#endif // RCT_NEW_ARCH_ENABLED

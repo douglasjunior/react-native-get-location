@@ -20,11 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import <React/RCTBridgeModule.h>
+#import <React/RCTConvert.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface SettingsUtil : NSObject
+@interface LocationModuleImpl : NSObject <CLLocationManagerDelegate>
 
-+ (void) openAppSettings;
+- (void) getCurrentPosition: (NSDictionary*) options
+                    promise: (RCTPromiseResolveBlock) resolve
+                   rejecter: (RCTPromiseRejectBlock) reject;
 
 @end
