@@ -22,21 +22,27 @@
  * SOFTWARE.
  */
 
-import {Linking, NativeModules, Platform} from 'react-native';
+import {Linking, Platform, Rationale} from 'react-native';
 
-import {
-  GetCurrentPositionOptions,
+import ReactNativeGetLocation, {
   Location,
-  requestAndroidPermission,
-} from './utils';
+  NativeOptions,
+} from './specs/NativeRNGetLocation';
+import {requestAndroidPermission} from './utils';
 import LocationError, {isLocationError} from './LocationError';
-
 export {default as LocationError, isLocationError} from './LocationError';
 export type {LocationErrorCode} from './LocationError';
-export type {GetCurrentPositionOptions, Location} from './utils';
+export type {Location} from './specs/NativeRNGetLocation';
+
+export type GetCurrentPositionOptions = NativeOptions & {
+  /**
+   * Android only
+   * See the [React Native docs](https://reactnative.dev/docs/permissionsandroid#request)
+   */
+  rationale?: Rationale;
+};
 
 const {OS} = Platform;
-const {ReactNativeGetLocation} = NativeModules;
 
 const DEFAULT_OPTIONS: GetCurrentPositionOptions = {
   enableHighAccuracy: false,
@@ -47,13 +53,13 @@ const GetLocation = {
   async getCurrentPosition(
     options: GetCurrentPositionOptions = DEFAULT_OPTIONS,
   ): Promise<Location> {
-    const opts = {...DEFAULT_OPTIONS, ...options};
+    const {rationale, ...opts} = {...DEFAULT_OPTIONS, ...options};
     if (OS === 'android') {
-      await requestAndroidPermission(opts.enableHighAccuracy, opts.rationale);
+      await requestAndroidPermission(opts.enableHighAccuracy, rationale);
     }
 
     try {
-      return ReactNativeGetLocation.getCurrentPosition(opts);
+      return await ReactNativeGetLocation.getCurrentPosition(opts);
     } catch (error) {
       if (isLocationError(error)) {
         throw new LocationError(error.code, error.message);

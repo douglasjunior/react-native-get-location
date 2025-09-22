@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function App(): JSX.Element {
+function App() {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<LocationErrorCode | null>(null);

@@ -9,5 +9,8 @@ node_modules/
 __tests__/
 screenshots/
 Sample/
-src/
 scripts/
+android/build/
+android/.idea/
+android/.gradle/
+DEPENDENTS.md
