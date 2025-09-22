@@ -8,8 +8,9 @@
 
 ## Requirements
 
-- React Native >= 0.60.0
-- iOS >= 9.0
+- React Native >= 0.71.0
+- iOS >= 14.0
+- Android >= API 21
 
 ## Install
 
