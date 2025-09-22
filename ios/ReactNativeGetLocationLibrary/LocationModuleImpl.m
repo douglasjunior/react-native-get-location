@@ -68,8 +68,8 @@ double mTimeout;
             [info setValue:exception.callStackSymbols forKey:@"ExceptionCallStackSymbols"];
             [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
             
-            NSError *error = [[NSError alloc] initWithDomain:@"Location not available." code:1 userInfo:info];
-            reject(@"UNAVAILABLE", @"Location not available", error);
+            NSError *error = [[NSError alloc] initWithDomain:@"Location service is disabled or unavailable" code:1 userInfo:info];
+            reject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
         }
     });
 }
@@ -96,7 +96,7 @@ double mTimeout;
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     if (mReject != nil) {
-        mReject(@"UNAVAILABLE", @"Location not available", error);
+        mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
     }
     [self clearReferences];
 }
@@ -124,7 +124,7 @@ double mTimeout;
 
 - (void) cancelPreviousRequest {
     if (mLocationManager != nil) {
-        mReject(@"CANCELLED", @"Location cancelled by another request", nil);
+        mReject(@"CANCELLED", @"Location cancelled by user or by another request", nil);
     }
     [self clearReferences];
 }
@@ -152,7 +152,7 @@ double mTimeout;
 - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (![CLLocationManager locationServicesEnabled]) {
-            mReject(@"UNAVAILABLE", @"Location service not available", nil);
+            mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
             [self clearReferences];
             return;
         }
@@ -170,7 +170,7 @@ double mTimeout;
             case kCLAuthorizationStatusDenied:
             case kCLAuthorizationStatusRestricted:
             default: {
-                mReject(@"UNAUTHORIZED", @"Authorization denied", nil);
+                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
                 [self clearReferences];
                 break;
             }

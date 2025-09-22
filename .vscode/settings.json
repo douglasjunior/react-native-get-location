@@ -1,0 +1,13 @@
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Use conventional commit message format."
+    },
+    {
+      "text": "If the changes include breaking changes, include 'BREAKING CHANGE' in the footer."
+    },
+    {
+      "text": "Write the commit message in English."
+    }
+  ]
+}

@@ -22,11 +22,26 @@
  * SOFTWARE.
  */
 
+/**
+ * LocationErrorCode values
+ */
 export type LocationErrorCode =
-  | 'CANCELLED'
-  | 'UNAVAILABLE'
-  | 'TIMEOUT'
-  | 'UNAUTHORIZED';
+  /**
+   * Location cancelled by user or by another request
+   */
+  'CANCELLED' |
+  /**
+   * Location service is disabled or unavailable
+   */
+  'UNAVAILABLE' |
+  /**
+   * Location request timed out
+   */
+  'TIMEOUT' |
+  /**
+   * Location permission denied by the user
+   */
+  'UNAUTHORIZED';
 
 export default class LocationError extends Error {
   code: LocationErrorCode;

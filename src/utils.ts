@@ -43,7 +43,7 @@ export async function requestAndroidPermission(
   const granted = await PermissionsAndroid.request(permission, rationale);
 
   if (granted !== RESULTS.GRANTED) {
-    throw new LocationError('UNAUTHORIZED', 'Authorization denied');
+    throw new LocationError('UNAUTHORIZED', 'Location permission denied by the user');
   }
 
   return true;

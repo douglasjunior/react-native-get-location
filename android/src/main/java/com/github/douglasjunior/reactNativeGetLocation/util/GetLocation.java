@@ -54,7 +54,7 @@ public class GetLocation {
         this.promise = promise;
         try {
             if (!isLocationEnabled()) {
-                promise.reject("UNAVAILABLE", "Location not available");
+                promise.reject("UNAVAILABLE", "Location service is disabled or unavailable");
                 return;
             }
 
@@ -122,11 +122,11 @@ public class GetLocation {
         } catch (SecurityException ex) {
             ex.printStackTrace();
             stop();
-            promise.reject("UNAUTHORIZED", "Location permission denied", ex);
+            promise.reject("UNAUTHORIZED", "Location permission denied by the user", ex);
         } catch (Exception ex) {
             ex.printStackTrace();
             stop();
-            promise.reject("UNAVAILABLE", "Location not available", ex);
+            promise.reject("UNAVAILABLE", "Location service is disabled or unavailable", ex);
         }
     }
 
@@ -135,7 +135,7 @@ public class GetLocation {
             return;
         }
         try {
-            promise.reject("CANCELLED", "Location cancelled by another request");
+            promise.reject("CANCELLED", "Location cancelled by user or by another request");
             stop();
             clearReferences();
         } catch (Exception ex) {
