@@ -170,7 +170,9 @@ double mTimeout;
             case kCLAuthorizationStatusDenied:
             case kCLAuthorizationStatusRestricted:
             default: {
-                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
+                if (mReject != nil) {
+                    mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
+                }
                 [self clearReferences];
                 break;
             }
