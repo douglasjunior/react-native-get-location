@@ -81,30 +81,60 @@ function App() {
     setLocation(null);
     setError(null);
 
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 30000,
-      rationale: {
-        title: 'Location permission',
-        message: 'The app needs the permission to request your location.',
-        buttonPositive: 'Ok',
-      },
-    })
-      .then(newLocation => {
-        setLoading(false);
-        setLocation(newLocation);
-      })
-      .catch(ex => {
-        if (isLocationError(ex)) {
-          const {code, message} = ex;
-          console.warn(code, message);
-          setError(code);
-        } else {
-          console.warn(ex);
-        }
-        setLoading(false);
-        setLocation(null);
-      });
+    console.log("Started 1");
+		GetLocation.getCurrentPosition({
+			enableHighAccuracy: true,
+			timeout: 30000,
+			rationale: {
+				title: "Location permission",
+				message: "The app needs the permission to request your location.",
+				buttonPositive: "Ok",
+			},
+		})
+		.then((newLocation) => {
+			console.log("Resolved 1", newLocation);
+			setLoading(false);
+			setLocation(newLocation);
+		})
+		.catch((ex) => {
+			console.log("Rejected 1", ex);
+			if (isLocationError(ex)) {
+				const { code, message } = ex;
+				console.warn(code, message);
+				setError(code);
+			} else {
+				console.warn(ex);
+			}
+			setLoading(false);
+			setLocation(null);
+		});
+		console.log("Started 2");
+		GetLocation.getCurrentPosition({
+			enableHighAccuracy: true,
+			timeout: 30000,
+			rationale: {
+				title: "Location permission",
+				message: "The app needs the permission to request your location.",
+				buttonPositive: "Ok",
+			},
+		})
+			.then((newLocation) => {
+				console.log("Resolved 2", newLocation);
+				setLoading(false);
+				setLocation(newLocation);
+			})
+			.catch((ex) => {
+				console.log("Rejected 2", ex);
+				if (isLocationError(ex)) {
+					const { code, message } = ex;
+					console.warn(code, message);
+					setError(code);
+				} else {
+					console.warn(ex);
+				}
+				setLoading(false);
+				setLocation(null);
+			});
   };
 
   return (

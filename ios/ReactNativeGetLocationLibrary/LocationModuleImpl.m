@@ -44,20 +44,20 @@ double mTimeout;
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [self cancelPreviousRequest];
-                       
+
             bool enableHighAccuracy = [RCTConvert BOOL:options[@"enableHighAccuracy"]];
             double timeout = [RCTConvert double:options[@"timeout"]];
-            
+
             CLLocationManager *locationManager = [[CLLocationManager alloc] init];
             locationManager.delegate = self;
             locationManager.distanceFilter = kCLDistanceFilterNone;
             locationManager.desiredAccuracy = enableHighAccuracy ? kCLLocationAccuracyBest : kCLLocationAccuracyNearestTenMeters;
-            
+
             mResolve = resolve;
             mReject = reject;
             mLocationManager = locationManager;
             mTimeout = timeout;
-            
+
             [self startUpdatingLocation];
         }
         @catch (NSException *exception) {
@@ -67,7 +67,7 @@ double mTimeout;
             [info setValue:exception.callStackReturnAddresses forKey:@"ExceptionCallStackReturnAddresses"];
             [info setValue:exception.callStackSymbols forKey:@"ExceptionCallStackSymbols"];
             [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
-            
+
             NSError *error = [[NSError alloc] initWithDomain:@"Location service is disabled or unavailable" code:1 userInfo:info];
             reject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
         }
@@ -77,7 +77,7 @@ double mTimeout;
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (locations.count > 0 && mResolve != nil) {
         CLLocation* location = locations[0];
-        
+
         NSDictionary* locationResult = @{
             @"latitude": @(location.coordinate.latitude),
             @"longitude": @(location.coordinate.longitude),
@@ -88,7 +88,7 @@ double mTimeout;
             @"verticalAccuracy": @(location.verticalAccuracy),
             @"course": @(location.course),
         };
-        
+
         mResolve(locationResult);
     }
     [self clearReferences];
@@ -135,10 +135,10 @@ double mTimeout;
         [mLocationManager requestWhenInUseAuthorization];
         return;
     }
-    
+
     NSLog(@"[locationManager startUpdatingLocation]");
     [mLocationManager startUpdatingLocation];
-    
+
     if (mTimeout > 0) {
         NSTimeInterval timeoutInterval = mTimeout / 1000.0;
         mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
@@ -156,7 +156,7 @@ double mTimeout;
             [self clearReferences];
             return;
         }
-        
+
         switch ([manager authorizationStatus]) {
             case kCLAuthorizationStatusAuthorizedAlways:
             case kCLAuthorizationStatusAuthorizedWhenInUse: {
@@ -170,9 +170,9 @@ double mTimeout;
             case kCLAuthorizationStatusDenied:
             case kCLAuthorizationStatusRestricted:
             default: {
-                if (mReject != nil) {
-                    mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
-                }
+                // if (mReject != nil) {
+                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
+                // }
                 [self clearReferences];
                 break;
             }
@@ -182,7 +182,7 @@ double mTimeout;
 
 - (BOOL) isAuthorized {
     int authorizationStatus = [mLocationManager authorizationStatus];
-    
+
     return authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse
     || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways;
 }

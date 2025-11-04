@@ -1654,7 +1654,7 @@ PODS:
     - React-logger (= 0.79.5)
     - React-perflogger (= 0.79.5)
     - React-utils (= 0.79.5)
-  - ReactNativeGetLocation (5.0.0):
+  - ReactNativeGetLocation (6.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1975,10 +1975,10 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: f3e842e6cb5a825b6918a74a38402ba1409411f8
   ReactCodegen: 6cb6e0d0b52471abc883541c76589d1c367c64c7
   ReactCommon: 1ab5451fc5da87c4cc4c3046e19a8054624ca763
-  ReactNativeGetLocation: 10463be608a0f7accea68ab0c5327d904824ccbb
+  ReactNativeGetLocation: bfb4eee70314e5a57eb07d5074d14a7ec6dc1f19
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: adb397651e1c00672c12e9495babca70777e411e
 
 PODFILE CHECKSUM: d14d8b35ba5eaeddee311a5a63998c505c23560e
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.16.2
