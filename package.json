@@ -1,7 +1,7 @@
 {
   "name": "react-native-get-location",
   "displayName": "React-Native Get Location",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "⚛ Simple to use React Native library to get device location for Android and iOS.",
   "main": "src",
   "react-native": "src",
