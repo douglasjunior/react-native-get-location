@@ -15,6 +15,14 @@ export type NativeOptions = {
    * Default: 60000 (60 seconds)
    */
   timeout: Int32;
+  /**
+   * (Android only) When true, if location is disabled, show the Google Play Services
+   * "Turn on Location" dialog. The promise resolves once location is enabled and a fix is obtained.
+   * iOS already handles location prompts via the system.
+   *
+   * Default: false
+   */
+  enableLocationPrompt?: boolean;
 };
 
 export type Location = {

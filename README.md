@@ -15,15 +15,18 @@
 ## Install
 
 Install dependency package
+
 ```bash
 yarn add react-native-get-location
 ```
+
 Or
+
 ```bash
 npm i -S react-native-get-location
 ```
 
-Go to the folder **your-project/ios** and run `pod install`, and you're done. 
+Go to the folder **your-project/ios** and run `pod install`, and you're done.
 
 ## Android post install
 
@@ -51,19 +54,20 @@ You need to define the permission [NSLocationWhenInUseUsageDescription](https://
 There is only one function that you need to use to get the user's current location.
 
 ```js
-import GetLocation from 'react-native-get-location'
+import GetLocation from 'react-native-get-location';
 
 GetLocation.getCurrentPosition({
-    enableHighAccuracy: true,
-    timeout: 60000,
+  enableHighAccuracy: true,
+  timeout: 60000,
+  enableLocationPrompt: true, // optional (Android): show "Turn on Location" dialog if disabled
 })
-.then(location => {
+  .then(location => {
     console.log(location);
-})
-.catch(error => {
-    const { code, message } = error;
+  })
+  .catch(error => {
+    const {code, message} = error;
     console.warn(code, message);
-})
+  });
 ```
 
 For more details, see the [Sample Project](https://github.com/douglasjunior/react-native-get-location/blob/master/Sample/App.tsx).
@@ -73,40 +77,45 @@ For more details, see the [Sample Project](https://github.com/douglasjunior/reac
 ### function `GetLocation.getCurrentPosition(LocationConfig)`
 
 **Parameters:**
-   - [`LocationConfig`](#object-locationconfig): Configuration object to determine how to get the user current location.
+
+- [`LocationConfig`](#object-locationconfig): Configuration object to determine how to get the user current location.
 
 **Return:**
-   - `Promise<`[`Location`](#object-location)`>`: Promise thats resolve to a Location object.
+
+- `Promise<`[`Location`](#object-location)`>`: Promise thats resolve to a Location object.
 
 ### Object `LocationConfig`
 
 **Properties:**
-   - `enableHighAccuracy`: Set `true` to use 'fine location' (GPS) our `false` to use 'course location' (Wifi, Bluetooth, 3G). Default: `false`
-   - `timeout`: The max time (in milliseconds) that you want to wait to receive a location. Default: `60000` (60 seconds)
-   - `rationale?`: (Android only) See the [React Native docs](https://reactnative.dev/docs/permissionsandroid#request).
+
+- `enableHighAccuracy`: Set `true` to use 'fine location' (GPS) our `false` to use 'course location' (Wifi, Bluetooth, 3G). Default: `false`
+- `timeout`: The max time (in milliseconds) that you want to wait to receive a location. Default: `60000` (60 seconds)
+  - `enableLocationPrompt`: _(Android only)_ When `true`, if location is disabled the app shows the Google Play Services "Turn on Location" dialog (similar to Google Maps). The promise resolves once the user enables location and a fix is obtained. iOS already handles location prompts via the system. Default: `false`
+- `rationale?`: (Android only) See the [React Native docs](https://reactnative.dev/docs/permissionsandroid#request).
 
 ### Object `Location`
 
 **Properties:**
-   - `latitude`: The latitude, in degrees.
-   - `longitude`: The longitude, in degrees.
-   - `altitude`: The altitude if available, in meters above the WGS 84 reference ellipsoid.
-   - `accuracy`: The estimated horizontal accuracy of this location, radial, in meters.
-   - `speed`: The speed if it is available, in meters/second over ground.
-   - `time`: The UTC time of this fix, in milliseconds since January 1, 1970.
-   - `bearing`: *(Android only)* The bearing, in degrees.
-   - `provider`: *(Android only)* The name of the provider that generated this fix.
-   - `verticalAccuracy`: *(iOS only)* The vertical accuracy of the location. Negative if the altitude is invalid.
-   - `course`: *(iOS only)* The course of the location in degrees true North. Negative if course is invalid. (0.0 - 359.9 degrees, 0 being true North)
+
+- `latitude`: The latitude, in degrees.
+- `longitude`: The longitude, in degrees.
+- `altitude`: The altitude if available, in meters above the WGS 84 reference ellipsoid.
+- `accuracy`: The estimated horizontal accuracy of this location, radial, in meters.
+- `speed`: The speed if it is available, in meters/second over ground.
+- `time`: The UTC time of this fix, in milliseconds since January 1, 1970.
+- `bearing`: _(Android only)_ The bearing, in degrees.
+- `provider`: _(Android only)_ The name of the provider that generated this fix.
+- `verticalAccuracy`: _(iOS only)_ The vertical accuracy of the location. Negative if the altitude is invalid.
+- `course`: _(iOS only)_ The course of the location in degrees true North. Negative if course is invalid. (0.0 - 359.9 degrees, 0 being true North)
 
 ### Error codes
 
-|Code|Message|
-|-|-|
-|`CANCELLED`|Location cancelled by user or by another request|
-|`UNAVAILABLE`|Location service is disabled or unavailable|
-|`TIMEOUT`|Location request timed out|
-|`UNAUTHORIZED`|Location permission denied by the user|
+| Code           | Message                                          |
+| -------------- | ------------------------------------------------ |
+| `CANCELLED`    | Location cancelled by user or by another request |
+| `UNAVAILABLE`  | Location service is disabled or unavailable      |
+| `TIMEOUT`      | Location request timed out                       |
+| `UNAUTHORIZED` | Location permission denied by the user           |
 
 ## Contribute
 

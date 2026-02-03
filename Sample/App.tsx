@@ -84,6 +84,7 @@ function App() {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 30000,
+      enableLocationPrompt: true,
       rationale: {
         title: 'Location permission',
         message: 'The app needs the permission to request your location.',

@@ -139,4 +139,5 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+' // from node_modules
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
 }

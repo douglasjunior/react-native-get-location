@@ -10,9 +10,6 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * <p>
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +23,9 @@ package com.github.douglasjunior.reactNativeGetLocation.modules;
 
 import static com.github.douglasjunior.reactNativeGetLocation.ReactNativeGetLocationImpl.REACT_MODULE_NAME;
 
+import android.app.Activity;
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.Promise;
@@ -35,12 +35,15 @@ import com.facebook.react.bridge.ReadableMap;
 import com.github.douglasjunior.reactNativeGetLocation.NativeRNGetLocationSpec;
 import com.github.douglasjunior.reactNativeGetLocation.ReactNativeGetLocationImpl;
 
-public class ReactNativeGetLocationModule extends NativeRNGetLocationSpec {
+public class ReactNativeGetLocationModule extends NativeRNGetLocationSpec
+        implements com.facebook.react.bridge.ActivityEventListener {
+
     private final ReactNativeGetLocationImpl impl;
 
     public ReactNativeGetLocationModule(ReactApplicationContext reactContext) {
         super(reactContext);
         impl = new ReactNativeGetLocationImpl(reactContext);
+        reactContext.addActivityEventListener(this);
     }
 
     @NonNull
@@ -49,9 +52,24 @@ public class ReactNativeGetLocationModule extends NativeRNGetLocationSpec {
         return REACT_MODULE_NAME;
     }
 
+    @Override
+    public void invalidate() {
+        getReactApplicationContext().removeActivityEventListener(this);
+        impl.clearPendingLocationPrompt();
+        super.invalidate();
+    }
+
     @ReactMethod
     @Override
     public void getCurrentPosition(ReadableMap options, Promise promise) {
         impl.getCurrentPosition(options, promise);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {}
+
+    @Override
+    public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        impl.onActivityResult(requestCode, resultCode);
     }
 }
