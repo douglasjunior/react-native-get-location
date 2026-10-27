@@ -77,7 +77,7 @@
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (locations.count > 0 && mResolve != nil) {
-        CLLocation* location = locations[0];
+        CLLocation* location = locations.lastObject;
         
         NSDictionary* locationResult = @{
             @"latitude": @(location.coordinate.latitude),
