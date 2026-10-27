@@ -145,12 +145,20 @@ double mTimeout;
     [mLocationManager startUpdatingLocation];
     
     if (mTimeout > 0) {
-        NSTimeInterval timeoutInterval = mTimeout / 1000.0;
-        mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
-                                                  target:self
-                                                selector:@selector(runTimeout:)
-                                                userInfo:nil
-                                                 repeats:NO];
+        // On the main run loop: this also runs from the background queue of
+        // locationManagerDidChangeAuthorization, where a scheduled timer never
+        // fires. One timer per request, so a repeated start doesn't orphan one.
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (mLocationManager == nil || mTimer != nil) {
+                return;
+            }
+            NSTimeInterval timeoutInterval = mTimeout / 1000.0;
+            mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
+                                                      target:self
+                                                    selector:@selector(runTimeout:)
+                                                    userInfo:nil
+                                                     repeats:NO];
+        });
     }
 }
 
