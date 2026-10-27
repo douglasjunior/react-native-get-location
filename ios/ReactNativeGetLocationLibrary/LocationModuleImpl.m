@@ -108,13 +108,8 @@
     [self clearReferences];
 }
 
+// Must be called on the main thread, where the manager and the timer live.
 - (void) clearReferences {
-    if (![NSThread isMainThread]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self clearReferences];
-        });
-        return;
-    }
     if (mTimer != nil) {
         [mTimer invalidate];
     }
