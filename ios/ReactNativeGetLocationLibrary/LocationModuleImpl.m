@@ -69,6 +69,7 @@
             [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
             
             NSError *error = [[NSError alloc] initWithDomain:@"Location service is disabled or unavailable" code:1 userInfo:info];
+            [self clearReferences];
             reject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
         }
     });
@@ -141,6 +142,13 @@
     NSLog(@"[locationManager startUpdatingLocation]");
     [mLocationManager startUpdatingLocation];
     
+    // startUpdatingLocation can run more than once per request (directly and again from the
+    // authorization callback); drop any earlier timer so it cannot fire later and reject a newer request.
+    if (mTimer != nil) {
+        [mTimer invalidate];
+        mTimer = nil;
+    }
+    
     if (mTimeout > 0) {
         NSTimeInterval timeoutInterval = mTimeout / 1000.0;
         mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
@@ -157,12 +165,17 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL servicesEnabled = [CLLocationManager locationServicesEnabled];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self handleAuthorizationStatus:status servicesEnabled:servicesEnabled];
+            [self handleAuthorizationStatus:status servicesEnabled:servicesEnabled forManager:manager];
         });
     });
 }
 
-- (void) handleAuthorizationStatus:(CLAuthorizationStatus)status servicesEnabled:(BOOL)servicesEnabled {
+- (void) handleAuthorizationStatus:(CLAuthorizationStatus)status servicesEnabled:(BOOL)servicesEnabled forManager:(CLLocationManager *)manager {
+    // The request this callback belonged to may have been finished or replaced while hopping queues.
+    if (manager != mLocationManager) {
+        return;
+    }
+    
     if (!servicesEnabled) {
         if (mReject != nil) {
             mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
