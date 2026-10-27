@@ -95,6 +95,11 @@ double mTimeout;
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    // kCLErrorLocationUnknown is transient: Core Location could not get a fix yet
+    // but keeps trying, so keep waiting while the timeout bounds the request.
+    if ([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown && mTimeout > 0) {
+        return;
+    }
     if (mReject != nil) {
         mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
     }
