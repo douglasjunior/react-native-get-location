@@ -19,20 +19,22 @@
 </p>
 
 <p align="center">
-  <a href="#-quick-start"><b>Quick Start</b></a> ·
-  <a href="#-why-get-location">Why</a> ·
-  <a href="#-requirements">Requirements</a> ·
-  <a href="#-installation">Installation</a> ·
-  <a href="#-platform-configuration">Platform Configuration</a> ·
-  <a href="#-usage">Usage</a> ·
-  <a href="#-api-reference">API</a> ·
-  <a href="#-error-codes">Error Codes</a> ·
-  <a href="#-contributing">Contributing</a>
+  <a href="#quick-start"><b>Quick Start</b></a> ·
+  <a href="#why-get-location">Why</a> ·
+  <a href="#requirements">Requirements</a> ·
+  <a href="#installation">Installation</a> ·
+  <a href="#platform-configuration">Platform Configuration</a> ·
+  <a href="#usage">Usage</a> ·
+  <a href="#api-reference">API</a> ·
+  <a href="#error-codes">Error Codes</a> ·
+  <a href="#contributing">Contributing</a>
 </p>
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
+
+<span id="quick-start"></span>
 
 ```bash
 # 1. Install dependency
@@ -65,7 +67,9 @@ try {
 
 ---
 
-## 💡 Why Get Location?
+## Why Get Location?
+
+<span id="why-get-location"></span>
 
 - ⚡ **Zero Bloat & No Heavy SDKs.** Relies strictly on Android's native `LocationManager` and iOS's `CLLocationManager`. No Google Play Services dependencies or bulky binary frameworks required.
 - 🏎️ **New Architecture Ready (TurboModule).** Engineered with React Native Codegen specs. Enjoy C++ TurboModule performance on New Architecture with seamless backward compatibility on the legacy bridge.
@@ -77,7 +81,9 @@ try {
 
 ---
 
-## 📋 Requirements
+## Requirements
+
+<span id="requirements"></span>
 
 | Requirement | Supported Version |
 |---|---|
@@ -88,7 +94,9 @@ try {
 
 ---
 
-## 📦 Installation
+## Installation
+
+<span id="installation"></span>
 
 ### 1. Install JavaScript Package
 
@@ -115,7 +123,9 @@ cd ios && pod install
 
 ---
 
-## ⚙️ Platform Configuration
+## Platform Configuration
+
+<span id="platform-configuration"></span>
 
 ### Android Setup
 
@@ -151,7 +161,9 @@ Open `ios/YourAppName/Info.plist` and add the `NSLocationWhenInUseUsageDescripti
 
 ---
 
-## 💻 Usage
+## Usage
+
+<span id="usage"></span>
 
 ### Basic Usage (Async / Await)
 
@@ -277,11 +289,13 @@ try {
 }
 ```
 
-For a complete working sample, explore the [Sample Project](Sample/App.tsx).
+For a complete working sample, explore the [Sample Project](https://github.com/douglasjunior/react-native-get-location/blob/master/Sample/App.tsx).
 
 ---
 
-## 📚 API Reference
+## API Reference
+
+<span id="api-reference"></span>
 
 All methods, types, and error helpers are exported from `'react-native-get-location'`.
 
@@ -357,7 +371,9 @@ Type guard utility to determine if an unknown caught exception is a `LocationErr
 
 ---
 
-## ⚠️ Error Codes
+## Error Codes
+
+<span id="error-codes"></span>
 
 When a position request fails, the promise rejects with a `LocationError` containing one of the following normalized codes:
 
@@ -365,19 +381,20 @@ When a position request fails, the promise rejects with a `LocationError` contai
 |---|---|---|
 | `CANCELLED` | `"Location cancelled by user or by another request"` | A new `getCurrentPosition` call was triggered before the previous one completed, or the OS canceled the request. Avoid duplicate simultaneous requests. |
 | `UNAVAILABLE` | `"Location service is disabled or unavailable"` | Location services / GPS hardware are turned off in system settings or unavailable on the device. Prompt user to turn location services on. |
-| `TIMEOUT` | `"Location request timed out"` | The device could not acquire a satellite or network fix within the configured `timeout` window. Increase timeout or toggle `enableHighAccuracy`. |
+| `TIMEOUT` | `"Location timed out"` | The device could not acquire a satellite or network fix within the configured `timeout` window. Increase timeout or toggle `enableHighAccuracy`. |
 | `UNAUTHORIZED` | `"Location permission denied by the user"` | The user denied location permissions. Use `GetLocation.openSettings()` to guide the user to the app permissions settings screen. |
 
 ---
 
-## 🤝 Contributing
+## Contributing
+
+<span id="contributing"></span>
 
 New features, bug fixes, and documentation improvements are welcome!
 
 1. Fork the repository and create a descriptive topic branch.
 2. Ensure TypeScript builds cleanly (`yarn build`).
-3. Follow [Conventional Commits](https://www.conventionalcommits.org/) for your commit messages.
-4. Open a pull request describing your changes.
+3. Open a pull request describing your changes.
 
 For questions and suggestions, please open an [issue](https://github.com/douglasjunior/react-native-get-location/issues).
 
@@ -393,7 +410,9 @@ If this library saved you time, consider supporting the maintainer:
 
 ---
 
-## ⭐ Star History
+## Star History
+
+<span id="star-history"></span>
 
 <p align="center">
   <a href="https://star-history.com/#douglasjunior/react-native-get-location&Date">
@@ -406,7 +425,9 @@ If this library saved you time, consider supporting the maintainer:
 
 ---
 
-## 📄 License
+## License
+
+<span id="license"></span>
 
 ```text
 The MIT License (MIT)
@@ -418,7 +439,9 @@ See the full [license file](LICENSE).
 
 ---
 
-## 🌐 Author & More Projects
+## Author & More Projects
+
+<span id="author--more-projects"></span>
 
 <p align="center">
   <a href="https://douglasjunior.work">

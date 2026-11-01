@@ -59,33 +59,35 @@
 
     <style>
       <![CDATA[
+      .anim-hud-float,
+      .anim-pin,
+      .anim-pin-shadow,
+      .anim-accuracy-pulse {
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
       @media (prefers-reduced-motion: no-preference) {
         .anim-star-twinkle {
           animation: starTwinkle 4s ease-in-out infinite;
         }
         .anim-radar-1 {
           animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) infinite;
-          transform-origin: 925px 245px;
         }
         .anim-radar-2 {
           animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) 1s infinite;
-          transform-origin: 925px 245px;
         }
         .anim-radar-3 {
           animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) 2s infinite;
-          transform-origin: 925px 245px;
         }
         .anim-pin {
           animation: pinBounce 4s ease-in-out infinite;
-          transform-origin: 925px 245px;
         }
         .anim-pin-shadow {
           animation: shadowScale 4s ease-in-out infinite;
-          transform-origin: 925px 245px;
         }
         .anim-accuracy-pulse {
           animation: accuracyPulse 3s ease-in-out infinite;
-          transform-origin: 925px 245px;
         }
         .anim-hud-float {
           animation: hudFloat 5s ease-in-out infinite;
@@ -96,8 +98,8 @@
       }
 
       @keyframes starTwinkle {
-        0%, 100% { opacity: 0.25; transform: scale(0.9); }
-        50% { opacity: 0.85; transform: scale(1.15); }
+        0%, 100% { opacity: 0.25; }
+        50% { opacity: 0.85; }
       }
 
       @keyframes radarWave {
@@ -264,14 +266,14 @@
       <rect width="100" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
       <text x="50" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">MIT License</text>
 
-      <rect x="110" width="124" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
-      <text x="172" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TypeScript Ready</text>
+      <rect x="110" width="134" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="177" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TypeScript Ready</text>
 
-      <rect x="244" width="138" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
-      <text x="313" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TurboModule Spec</text>
+      <rect x="254" width="138" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="323" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TurboModule Spec</text>
 
-      <rect x="392" width="168" height="26" rx="6" fill="rgba(63, 208, 255, 0.1)" stroke="rgba(63, 208, 255, 0.3)"/>
-      <text x="476" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#3fd0ff" text-anchor="middle">Android &amp; iOS Native</text>
+      <rect x="402" width="168" height="26" rx="6" fill="rgba(63, 208, 255, 0.1)" stroke="rgba(63, 208, 255, 0.3)"/>
+      <text x="486" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#3fd0ff" text-anchor="middle">Android &amp; iOS Native</text>
     </g>
   </g>
 
@@ -284,8 +286,8 @@
     <!-- Phone Chassis -->
     <rect x="12" y="12" width="366" height="526" rx="44" fill="#0d0f27" stroke="url(#phone-border)" stroke-width="2.5"/>
 
-    <!-- Screen Inner Area (Clipped) -->
-    <g clip-path="url(#screen-clip)">
+    <!-- Screen Inner Area (Clipped with local coordinate offset) -->
+    <g transform="translate(-730, -48)" clip-path="url(#screen-clip)">
       <!-- Map Background -->
       <rect x="752" y="66" width="346" height="508" fill="#090c1f"/>
 
@@ -362,58 +364,60 @@
         <text x="242" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#3fd0ff" text-anchor="middle">highAccuracy: true</text>
       </g>
 
-      <!-- Floating Location Result HUD Card (Bottom of Screen) -->
-      <g class="anim-hud-float" transform="translate(764, 368)">
-        <rect width="322" height="186" rx="18" fill="url(#hud-grad)" stroke="rgba(63, 208, 255, 0.35)" stroke-width="1.5"/>
+      <!-- Floating Location Result HUD Card (Bottom of Screen, wrapped in static positioning group) -->
+      <g transform="translate(764, 368)">
+        <g class="anim-hud-float">
+          <rect width="322" height="186" rx="18" fill="url(#hud-grad)" stroke="rgba(63, 208, 255, 0.35)" stroke-width="1.5"/>
 
-        <!-- Header / Fix Status -->
-        <g transform="translate(16, 20)">
-          <!-- Status Indicator Pill -->
-          <rect width="102" height="22" rx="11" fill="rgba(88, 224, 138, 0.14)" stroke="#58e08a" stroke-width="1"/>
-          <circle cx="11" cy="11" r="3.5" fill="#58e08a"/>
-          <text x="21" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#58e08a" letter-spacing="0.5">POSITION FIX</text>
+          <!-- Header / Fix Status -->
+          <g transform="translate(16, 20)">
+            <!-- Status Indicator Pill -->
+            <rect width="102" height="22" rx="11" fill="rgba(88, 224, 138, 0.14)" stroke="#58e08a" stroke-width="1"/>
+            <circle cx="11" cy="11" r="3.5" fill="#58e08a"/>
+            <text x="21" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#58e08a" letter-spacing="0.5">POSITION FIX</text>
 
-          <!-- Provider Chip -->
-          <rect x="194" width="96" height="22" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
-          <text x="242" y="15" font-family="ui-monospace, monospace" font-size="10" fill="#ffd56a" text-anchor="middle">provider: "gps"</text>
-        </g>
-
-        <!-- Coordinates Display -->
-        <g transform="translate(16, 56)">
-          <!-- Latitude -->
-          <text x="0" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LATITUDE</text>
-          <text x="0" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-23.550520°</text>
-
-          <!-- Longitude -->
-          <text x="150" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LONGITUDE</text>
-          <text x="150" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-46.633308°</text>
-        </g>
-
-        <!-- Separator -->
-        <line x1="16" y1="102" x2="306" y2="102" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
-
-        <!-- Metadata Metrics Row -->
-        <g transform="translate(16, 114)">
-          <g>
-            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ACCURACY</text>
-            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#3fd0ff">± 4.8 m</text>
+            <!-- Provider Chip -->
+            <rect x="194" width="96" height="22" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+            <text x="242" y="15" font-family="ui-monospace, monospace" font-size="10" fill="#ffd56a" text-anchor="middle">provider: "gps"</text>
           </g>
-          <g transform="translate(100, 0)">
-            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ALTITUDE</text>
-            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">760.4 m</text>
-          </g>
-          <g transform="translate(200, 0)">
-            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">SPEED</text>
-            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">0.0 m/s</text>
-          </g>
-        </g>
 
-        <!-- API Execution Badge -->
-        <g transform="translate(16, 154)">
-          <rect width="290" height="20" rx="6" fill="rgba(63, 208, 255, 0.08)"/>
-          <text x="145" y="14" font-family="ui-monospace, monospace" font-size="9.5" font-weight="600" fill="#3fd0ff" text-anchor="middle">
-            GetLocation.getCurrentPosition() ➔ Promise&lt;Location&gt;
-          </text>
+          <!-- Coordinates Display -->
+          <g transform="translate(16, 56)">
+            <!-- Latitude -->
+            <text x="0" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LATITUDE</text>
+            <text x="0" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-23.550520°</text>
+
+            <!-- Longitude -->
+            <text x="150" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LONGITUDE</text>
+            <text x="150" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-46.633308°</text>
+          </g>
+
+          <!-- Separator -->
+          <line x1="16" y1="102" x2="306" y2="102" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+
+          <!-- Metadata Metrics Row -->
+          <g transform="translate(16, 114)">
+            <g>
+              <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ACCURACY</text>
+              <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#3fd0ff">± 4.8 m</text>
+            </g>
+            <g transform="translate(100, 0)">
+              <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ALTITUDE</text>
+              <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">760.4 m</text>
+            </g>
+            <g transform="translate(200, 0)">
+              <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">SPEED</text>
+              <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">0.0 m/s</text>
+            </g>
+          </g>
+
+          <!-- API Execution Badge -->
+          <g transform="translate(16, 154)">
+            <rect width="290" height="20" rx="6" fill="rgba(63, 208, 255, 0.08)"/>
+            <text x="145" y="14" font-family="ui-monospace, monospace" font-size="9.5" font-weight="600" fill="#3fd0ff" text-anchor="middle">
+              GetLocation.getCurrentPosition() ➔ Promise&lt;Location&gt;
+            </text>
+          </g>
         </g>
       </g>
     </g>
