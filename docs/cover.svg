@@ -1,0 +1,421 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <defs>
+    <!-- Background Cosmic Gradients -->
+    <radialGradient id="nebula-violet" cx="18%" cy="18%" r="65%">
+      <stop offset="0%" stop-color="#5842d6" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#04050d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula-cyan" cx="84%" cy="24%" r="60%">
+      <stop offset="0%" stop-color="#1882be" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#04050d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula-pink" cx="45%" cy="94%" r="55%">
+      <stop offset="0%" stop-color="#be3c78" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#04050d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cosmic-stripe" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8b7bff"/>
+      <stop offset="35%" stop-color="#3fd0ff"/>
+      <stop offset="70%" stop-color="#ff6a8e"/>
+      <stop offset="100%" stop-color="#ffd56a"/>
+    </linearGradient>
+    <linearGradient id="title-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#e9ebfa"/>
+      <stop offset="100%" stop-color="#3fd0ff"/>
+    </linearGradient>
+    <linearGradient id="phone-border" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3fd0ff" stop-opacity="0.65"/>
+      <stop offset="50%" stop-color="#8b7bff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ff6a8e" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="pin-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3fd0ff"/>
+      <stop offset="100%" stop-color="#8b7bff"/>
+    </linearGradient>
+    <linearGradient id="hud-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(19, 23, 54, 0.92)"/>
+      <stop offset="100%" stop-color="rgba(10, 12, 29, 0.96)"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="glow-violet" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="pin-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Screen Clipping -->
+    <clipPath id="screen-clip">
+      <rect x="752" y="66" width="346" height="508" rx="30"/>
+    </clipPath>
+
+    <style>
+      <![CDATA[
+      @media (prefers-reduced-motion: no-preference) {
+        .anim-star-twinkle {
+          animation: starTwinkle 4s ease-in-out infinite;
+        }
+        .anim-radar-1 {
+          animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-radar-2 {
+          animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) 1s infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-radar-3 {
+          animation: radarWave 3s cubic-bezier(0.1, 0.5, 0.4, 1) 2s infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-pin {
+          animation: pinBounce 4s ease-in-out infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-pin-shadow {
+          animation: shadowScale 4s ease-in-out infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-accuracy-pulse {
+          animation: accuracyPulse 3s ease-in-out infinite;
+          transform-origin: 925px 245px;
+        }
+        .anim-hud-float {
+          animation: hudFloat 5s ease-in-out infinite;
+        }
+        .anim-dot-pulse {
+          animation: dotBlink 1.5s ease-in-out infinite;
+        }
+      }
+
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.25; transform: scale(0.9); }
+        50% { opacity: 0.85; transform: scale(1.15); }
+      }
+
+      @keyframes radarWave {
+        0% {
+          r: 12px;
+          opacity: 0.9;
+          stroke-width: 2.5px;
+        }
+        100% {
+          r: 96px;
+          opacity: 0;
+          stroke-width: 0.5px;
+        }
+      }
+
+      @keyframes pinBounce {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes shadowScale {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scale(0.7);
+          opacity: 0.25;
+        }
+      }
+
+      @keyframes accuracyPulse {
+        0%, 100% {
+          opacity: 0.35;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.65;
+          transform: scale(1.04);
+        }
+      }
+
+      @keyframes hudFloat {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+
+      @keyframes dotBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+      ]]>
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1280" height="640" rx="20" fill="#04050d"/>
+  <rect width="1280" height="640" rx="20" fill="url(#nebula-violet)"/>
+  <rect width="1280" height="640" rx="20" fill="url(#nebula-cyan)"/>
+  <rect width="1280" height="640" rx="20" fill="url(#nebula-pink)"/>
+
+  <!-- Subtle Blueprint Grid -->
+  <g opacity="0.10">
+    <line x1="80" y1="0" x2="80" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="360" y1="0" x2="360" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="520" y1="0" x2="520" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="680" y1="0" x2="680" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="840" y1="0" x2="840" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="1160" y1="0" x2="1160" y2="640" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="0" y1="80" x2="1280" y2="80" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1280" y2="200" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="0" y1="320" x2="1280" y2="320" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="0" y1="440" x2="1280" y2="440" stroke="#8b7bff" stroke-width="1"/>
+    <line x1="0" y1="560" x2="1280" y2="560" stroke="#8b7bff" stroke-width="1"/>
+  </g>
+
+  <!-- Stars -->
+  <g class="anim-star-twinkle" fill="#ffd56a">
+    <circle cx="150" cy="85" r="1.5" opacity="0.6"/>
+    <circle cx="270" cy="470" r="1.2" opacity="0.4"/>
+    <circle cx="610" cy="115" r="1.8" opacity="0.7"/>
+    <circle cx="700" cy="530" r="1.4" opacity="0.5"/>
+    <circle cx="1190" cy="130" r="2.0" opacity="0.8"/>
+    <circle cx="1140" cy="570" r="1.3" opacity="0.4"/>
+  </g>
+  <g fill="#3fd0ff">
+    <circle cx="120" cy="330" r="1.2" opacity="0.5"/>
+    <circle cx="570" cy="380" r="1.6" opacity="0.6"/>
+    <circle cx="730" cy="75" r="1.2" opacity="0.4"/>
+    <circle cx="1230" cy="410" r="1.5" opacity="0.7"/>
+  </g>
+
+  <!-- Outer Frame & Cosmic Stripe -->
+  <rect x="1" y="1" width="1278" height="638" rx="19" fill="none" stroke="rgba(150, 160, 255, 0.16)" stroke-width="2"/>
+  <rect x="0" y="635" width="1280" height="5" fill="url(#cosmic-stripe)"/>
+
+  <!-- ==================== LEFT COLUMN: CONTENT ==================== -->
+  <g transform="translate(80, 0)">
+    <!-- Pill Category -->
+    <g transform="translate(0, 88)">
+      <rect width="280" height="32" rx="16" fill="rgba(139, 123, 255, 0.12)" stroke="#8b7bff" stroke-width="1.2"/>
+      <circle cx="18" cy="16" r="4" fill="#3fd0ff"/>
+      <text x="32" y="21" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e9ebfa" letter-spacing="1">REACT NATIVE · GEOLOCATION</text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="0" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#ffffff" letter-spacing="-0.5">
+      react-native-
+    </text>
+    <text x="0" y="234" font-family="system-ui, -apple-system, sans-serif" font-size="46" font-weight="800" fill="url(#title-grad)" letter-spacing="-0.5">
+      get-location
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="278" font-family="system-ui, -apple-system, sans-serif" font-size="17" fill="#9ba1c7" font-weight="400">
+      Simple, reliable native device location for React Native.
+    </text>
+    <text x="0" y="304" font-family="system-ui, -apple-system, sans-serif" font-size="17" fill="#838ab2" font-weight="400">
+      Native platform GPS &amp; network fixes with <tspan fill="#3fd0ff" font-weight="600">TurboModule</tspan> support.
+    </text>
+
+    <!-- Feature Cards -->
+    <g transform="translate(0, 340)">
+      <!-- Card 1 -->
+      <g transform="translate(0, 0)">
+        <rect width="560" height="52" rx="12" fill="rgba(13, 15, 36, 0.65)" stroke="rgba(150, 160, 255, 0.14)" stroke-width="1"/>
+        <circle cx="26" cy="26" r="10" fill="rgba(88, 224, 138, 0.15)"/>
+        <text x="26" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#58e08a" text-anchor="middle">✓</text>
+        <text x="50" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#e9ebfa">Zero Bloat &amp; Zero Heavy SDKs</text>
+        <text x="50" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9ba1c7">Direct Android LocationManager &amp; iOS CLLocationManager without Play Services</text>
+      </g>
+
+      <!-- Card 2 -->
+      <g transform="translate(0, 64)">
+        <rect width="560" height="52" rx="12" fill="rgba(13, 15, 36, 0.65)" stroke="rgba(150, 160, 255, 0.14)" stroke-width="1"/>
+        <circle cx="26" cy="26" r="10" fill="rgba(63, 208, 255, 0.15)"/>
+        <text x="26" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#3fd0ff" text-anchor="middle">⚡</text>
+        <text x="50" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#e9ebfa">New Architecture Ready (TurboModule)</text>
+        <text x="50" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9ba1c7">Codegen-typed native specs for React Native 0.71+ with backward compatibility</text>
+      </g>
+
+      <!-- Card 3 -->
+      <g transform="translate(0, 128)">
+        <rect width="560" height="52" rx="12" fill="rgba(13, 15, 36, 0.65)" stroke="rgba(150, 160, 255, 0.14)" stroke-width="1"/>
+        <circle cx="26" cy="26" r="10" fill="rgba(139, 123, 255, 0.15)"/>
+        <text x="26" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#8b7bff" text-anchor="middle">🎯</text>
+        <text x="50" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#e9ebfa">Normalized Cross-Platform Parity</text>
+        <text x="50" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9ba1c7">Unified Location object, auto permissions, and strict error codes (CANCELLED, TIMEOUT...)</text>
+      </g>
+    </g>
+
+    <!-- Bottom Metadata Chips -->
+    <g transform="translate(0, 545)">
+      <rect width="100" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="50" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">MIT License</text>
+
+      <rect x="110" width="124" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="172" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TypeScript Ready</text>
+
+      <rect x="244" width="138" height="26" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="313" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#9ba1c7" text-anchor="middle">TurboModule Spec</text>
+
+      <rect x="392" width="168" height="26" rx="6" fill="rgba(63, 208, 255, 0.1)" stroke="rgba(63, 208, 255, 0.3)"/>
+      <text x="476" y="17" font-family="ui-monospace, monospace" font-size="11.5" fill="#3fd0ff" text-anchor="middle">Android &amp; iOS Native</text>
+    </g>
+  </g>
+
+  <!-- ==================== RIGHT COLUMN: ANIMATED GPS DEVICE MOCK ==================== -->
+  <g transform="translate(730, 48)">
+    <!-- Device Ambient Glow -->
+    <rect x="12" y="12" width="366" height="526" rx="46" fill="none" stroke="rgba(63, 208, 255, 0.28)" stroke-width="16" opacity="0.3" filter="url(#glow-cyan)"/>
+    <rect x="12" y="12" width="366" height="526" rx="46" fill="none" stroke="rgba(139, 123, 255, 0.36)" stroke-width="20" opacity="0.3" filter="url(#glow-violet)"/>
+
+    <!-- Phone Chassis -->
+    <rect x="12" y="12" width="366" height="526" rx="44" fill="#0d0f27" stroke="url(#phone-border)" stroke-width="2.5"/>
+
+    <!-- Screen Inner Area (Clipped) -->
+    <g clip-path="url(#screen-clip)">
+      <!-- Map Background -->
+      <rect x="752" y="66" width="346" height="508" fill="#090c1f"/>
+
+      <!-- Stylized City Map Blocks -->
+      <g opacity="0.85">
+        <!-- Park Green Zone -->
+        <rect x="764" y="140" width="88" height="110" rx="12" fill="rgba(88, 224, 138, 0.12)" stroke="rgba(88, 224, 138, 0.25)" stroke-width="1"/>
+        <text x="808" y="198" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#58e08a" text-anchor="middle" letter-spacing="1">PARK</text>
+
+        <!-- Building / City Blocks -->
+        <rect x="864" y="140" width="108" height="60" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+        <rect x="982" y="140" width="104" height="110" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+        <rect x="764" y="260" width="88" height="70" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+        <rect x="864" y="210" width="108" height="120" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+        <rect x="982" y="260" width="104" height="70" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+      </g>
+
+      <!-- Road Grid Lines -->
+      <g>
+        <!-- Horizontal Roads -->
+        <path d="M740 128 L1110 128" stroke="rgba(255, 255, 255, 0.09)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M740 128 L1110 128" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" stroke-dasharray="6 8"/>
+
+        <path d="M740 342 L1110 342" stroke="rgba(255, 255, 255, 0.09)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M740 342 L1110 342" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" stroke-dasharray="6 8"/>
+
+        <!-- Vertical Roads -->
+        <path d="M858 60 L858 400" stroke="rgba(255, 255, 255, 0.09)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M858 60 L858 400" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" stroke-dasharray="6 8"/>
+
+        <path d="M976 60 L976 400" stroke="rgba(255, 255, 255, 0.09)" stroke-width="18" stroke-linecap="round"/>
+        <path d="M976 60 L976 400" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1.5" stroke-dasharray="6 8"/>
+
+        <!-- Diagonal Arterial Ave -->
+        <path d="M740 380 C 820 320, 980 200, 1110 110" stroke="rgba(139, 123, 255, 0.15)" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <path d="M740 380 C 820 320, 980 200, 1110 110" stroke="rgba(139, 123, 255, 0.35)" stroke-width="1.5" stroke-dasharray="6 8" fill="none"/>
+      </g>
+
+      <!-- GPS Radar Waves around (925, 245) -->
+      <g>
+        <!-- Pulsing Accuracy Disk -->
+        <circle class="anim-accuracy-pulse" cx="925" cy="245" r="58" fill="rgba(63, 208, 255, 0.08)" stroke="#3fd0ff" stroke-width="1.5" stroke-dasharray="5 5"/>
+
+        <!-- Concentric Expanding Radar Waves -->
+        <circle class="anim-radar-1" cx="925" cy="245" r="14" fill="none" stroke="#3fd0ff"/>
+        <circle class="anim-radar-2" cx="925" cy="245" r="14" fill="none" stroke="#8b7bff"/>
+        <circle class="anim-radar-3" cx="925" cy="245" r="14" fill="none" stroke="#ff6a8e"/>
+      </g>
+
+      <!-- Pin Shadow (Tracks bounce) -->
+      <ellipse class="anim-pin-shadow" cx="925" cy="247" rx="16" ry="5" fill="#000000"/>
+
+      <!-- Map Pin Marker -->
+      <g class="anim-pin">
+        <g transform="translate(925, 245)">
+          <!-- Pin Body -->
+          <path d="M0 0 C-13 -20 -22 -32 -22 -44 a22 22 0 1 1 44 0 C22 -32 13 -20 0 0Z" fill="url(#pin-grad)" filter="url(#pin-glow)"/>
+          <!-- Inner Hole -->
+          <circle cx="0" cy="-44" r="8" fill="#090c1f"/>
+          <!-- Core Light Dot -->
+          <circle cx="0" cy="-44" r="3.5" fill="#ffffff"/>
+        </g>
+      </g>
+
+      <!-- Status Bar at Screen Top -->
+      <rect x="752" y="66" width="346" height="52" fill="rgba(13, 15, 36, 0.75)"/>
+      <g transform="translate(768, 84)">
+        <text x="0" y="14" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="700" fill="#e9ebfa">09:41</text>
+        <!-- Location Active Dot -->
+        <circle class="anim-dot-pulse" cx="50" cy="10" r="3.5" fill="#3fd0ff"/>
+        <text x="60" y="14" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#3fd0ff">GPS Active</text>
+        <!-- High Accuracy Chip -->
+        <rect x="186" y="0" width="112" height="20" rx="10" fill="rgba(63, 208, 255, 0.12)" stroke="rgba(63, 208, 255, 0.3)"/>
+        <text x="242" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#3fd0ff" text-anchor="middle">highAccuracy: true</text>
+      </g>
+
+      <!-- Floating Location Result HUD Card (Bottom of Screen) -->
+      <g class="anim-hud-float" transform="translate(764, 368)">
+        <rect width="322" height="186" rx="18" fill="url(#hud-grad)" stroke="rgba(63, 208, 255, 0.35)" stroke-width="1.5"/>
+
+        <!-- Header / Fix Status -->
+        <g transform="translate(16, 20)">
+          <!-- Status Indicator Pill -->
+          <rect width="102" height="22" rx="11" fill="rgba(88, 224, 138, 0.14)" stroke="#58e08a" stroke-width="1"/>
+          <circle cx="11" cy="11" r="3.5" fill="#58e08a"/>
+          <text x="21" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#58e08a" letter-spacing="0.5">POSITION FIX</text>
+
+          <!-- Provider Chip -->
+          <rect x="194" width="96" height="22" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+          <text x="242" y="15" font-family="ui-monospace, monospace" font-size="10" fill="#ffd56a" text-anchor="middle">provider: "gps"</text>
+        </g>
+
+        <!-- Coordinates Display -->
+        <g transform="translate(16, 56)">
+          <!-- Latitude -->
+          <text x="0" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LATITUDE</text>
+          <text x="0" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-23.550520°</text>
+
+          <!-- Longitude -->
+          <text x="150" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="600" fill="#9ba1c7">LONGITUDE</text>
+          <text x="150" y="34" font-family="ui-monospace, monospace" font-size="15" font-weight="800" fill="#ffffff">-46.633308°</text>
+        </g>
+
+        <!-- Separator -->
+        <line x1="16" y1="102" x2="306" y2="102" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+
+        <!-- Metadata Metrics Row -->
+        <g transform="translate(16, 114)">
+          <g>
+            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ACCURACY</text>
+            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#3fd0ff">± 4.8 m</text>
+          </g>
+          <g transform="translate(100, 0)">
+            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">ALTITUDE</text>
+            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">760.4 m</text>
+          </g>
+          <g transform="translate(200, 0)">
+            <text x="0" y="11" font-family="ui-monospace, monospace" font-size="9" fill="#9ba1c7">SPEED</text>
+            <text x="0" y="27" font-family="ui-monospace, monospace" font-size="12" font-weight="700" fill="#e9ebfa">0.0 m/s</text>
+          </g>
+        </g>
+
+        <!-- API Execution Badge -->
+        <g transform="translate(16, 154)">
+          <rect width="290" height="20" rx="6" fill="rgba(63, 208, 255, 0.08)"/>
+          <text x="145" y="14" font-family="ui-monospace, monospace" font-size="9.5" font-weight="600" fill="#3fd0ff" text-anchor="middle">
+            GetLocation.getCurrentPosition() ➔ Promise&lt;Location&gt;
+          </text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
