@@ -23,13 +23,13 @@
 #import "LocationModuleImpl.h"
 #import <React/RCTLog.h>
 
-@implementation LocationModuleImpl
-
-NSTimer* mTimer;
-CLLocationManager* mLocationManager;
-RCTPromiseResolveBlock mResolve;
-RCTPromiseRejectBlock mReject;
-double mTimeout;
+@implementation LocationModuleImpl {
+    NSTimer* mTimer;
+    CLLocationManager* mLocationManager;
+    RCTPromiseResolveBlock mResolve;
+    RCTPromiseRejectBlock mReject;
+    double mTimeout;
+}
 
 - (instancetype)init {
     self = [super init];
@@ -53,10 +53,10 @@ double mTimeout;
             locationManager.distanceFilter = kCLDistanceFilterNone;
             locationManager.desiredAccuracy = enableHighAccuracy ? kCLLocationAccuracyBest : kCLLocationAccuracyNearestTenMeters;
             
-            mResolve = resolve;
-            mReject = reject;
-            mLocationManager = locationManager;
-            mTimeout = timeout;
+            self->mResolve = resolve;
+            self->mReject = reject;
+            self->mLocationManager = locationManager;
+            self->mTimeout = timeout;
             
             [self startUpdatingLocation];
         }
@@ -69,6 +69,7 @@ double mTimeout;
             [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
             
             NSError *error = [[NSError alloc] initWithDomain:@"Location service is disabled or unavailable" code:1 userInfo:info];
+            [self clearReferences];
             reject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
         }
     });
@@ -76,7 +77,7 @@ double mTimeout;
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (locations.count > 0 && mResolve != nil) {
-        CLLocation* location = locations[0];
+        CLLocation* location = locations.lastObject;
         
         NSDictionary* locationResult = @{
             @"latitude": @(location.coordinate.latitude),
@@ -108,11 +109,13 @@ double mTimeout;
     [self clearReferences];
 }
 
+// Must be called on the main thread, where the manager and the timer live.
 - (void) clearReferences {
     if (mTimer != nil) {
         [mTimer invalidate];
     }
     if (mLocationManager != nil) {
+        mLocationManager.delegate = nil;
         [mLocationManager stopUpdatingLocation];
     }
     mResolve = nil;
@@ -123,7 +126,7 @@ double mTimeout;
 }
 
 - (void) cancelPreviousRequest {
-    if (mLocationManager != nil) {
+    if (mLocationManager != nil && mReject != nil) {
         mReject(@"CANCELLED", @"Location cancelled by user or by another request", nil);
     }
     [self clearReferences];
@@ -139,6 +142,13 @@ double mTimeout;
     NSLog(@"[locationManager startUpdatingLocation]");
     [mLocationManager startUpdatingLocation];
     
+    // startUpdatingLocation can run more than once per request (directly and again from the
+    // authorization callback); drop any earlier timer so it cannot fire later and reject a newer request.
+    if (mTimer != nil) {
+        [mTimer invalidate];
+        mTimer = nil;
+    }
+    
     if (mTimeout > 0) {
         NSTimeInterval timeoutInterval = mTimeout / 1000.0;
         mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
@@ -150,38 +160,57 @@ double mTimeout;
 }
 
 - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+    CLAuthorizationStatus status = [manager authorizationStatus];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (![CLLocationManager locationServicesEnabled]) {
-            mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
-            [self clearReferences];
-            return;
-        }
-        
-        switch ([manager authorizationStatus]) {
-            case kCLAuthorizationStatusAuthorizedAlways:
-            case kCLAuthorizationStatusAuthorizedWhenInUse: {
-                [self startUpdatingLocation];
-                break;
-            }
-            case kCLAuthorizationStatusNotDetermined: {
-                // user has not authorized ou denied yet
-                break;
-            }
-            case kCLAuthorizationStatusDenied:
-            case kCLAuthorizationStatusRestricted:
-            default: {
-                if (mReject != nil) {
-                    mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
-                }
-                [self clearReferences];
-                break;
-            }
-        }
+        BOOL servicesEnabled = [CLLocationManager locationServicesEnabled];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self handleAuthorizationStatus:status servicesEnabled:servicesEnabled forManager:manager];
+        });
     });
 }
 
+- (void) handleAuthorizationStatus:(CLAuthorizationStatus)status servicesEnabled:(BOOL)servicesEnabled forManager:(CLLocationManager *)manager {
+    // The request this callback belonged to may have been finished or replaced while hopping queues.
+    if (manager != mLocationManager) {
+        return;
+    }
+    
+    if (!servicesEnabled) {
+        if (mReject != nil) {
+            mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
+        }
+        [self clearReferences];
+        return;
+    }
+    
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse: {
+            [self startUpdatingLocation];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            // user has not authorized ou denied yet
+            break;
+        }
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+        default: {
+            if (mReject != nil) {
+                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
+            }
+            [self clearReferences];
+            break;
+        }
+    }
+}
+
 - (BOOL) isAuthorized {
-    int authorizationStatus = [mLocationManager authorizationStatus];
+    if (mLocationManager == nil) {
+        return NO;
+    }
+    CLAuthorizationStatus authorizationStatus = [mLocationManager authorizationStatus];
     
     return authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse
     || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways;
