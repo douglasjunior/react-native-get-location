@@ -316,7 +316,7 @@ Requests the device's current geographical fix and returns a Promise that resolv
 
 ---
 
-#### `GetLocation.openSettings(): Promise<any>`
+#### `GetLocation.openSettings(): Promise<void>`
 
 Opens the current application's system settings screen (e.g. to enable location permissions manually). Calls React Native's `Linking.openSettings()` under the hood.
 
@@ -379,7 +379,7 @@ When a position request fails, the promise rejects with a `LocationError` contai
 
 | Code | Canonical Message | Cause & Recommended Action |
 |---|---|---|
-| `CANCELLED` | `"Location cancelled by user or by another request"` | A new `getCurrentPosition` call was triggered before the previous one completed, or the OS canceled the request. Avoid duplicate simultaneous requests. |
+| `CANCELLED` | `"Location cancelled by user or by another request"` | A new `getCurrentPosition` call was triggered before the previous one completed. Avoid duplicate simultaneous requests. |
 | `UNAVAILABLE` | `"Location service is disabled or unavailable"` | Location services / GPS hardware are turned off in system settings or unavailable on the device. Prompt user to turn location services on. |
 | `TIMEOUT` | `"Location timed out"` | The device could not acquire a satellite or network fix within the configured `timeout` window. Increase timeout or toggle `enableHighAccuracy`. |
 | `UNAUTHORIZED` | `"Location permission denied by the user"` | The user denied location permissions. Use `GetLocation.openSettings()` to guide the user to the app permissions settings screen. |

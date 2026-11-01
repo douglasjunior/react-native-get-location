@@ -257,7 +257,7 @@
         <circle cx="26" cy="26" r="10" fill="rgba(139, 123, 255, 0.15)"/>
         <text x="26" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="800" fill="#8b7bff" text-anchor="middle">🎯</text>
         <text x="50" y="23" font-family="system-ui, -apple-system, sans-serif" font-size="14.5" font-weight="700" fill="#e9ebfa">Normalized Cross-Platform Parity</text>
-        <text x="50" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9ba1c7">Unified Location object, auto permissions, and strict error codes (CANCELLED, TIMEOUT...)</text>
+        <text x="50" y="42" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#9ba1c7">Unified Location object, auto permissions and strict error codes</text>
       </g>
     </g>
 
@@ -360,8 +360,8 @@
         <circle class="anim-dot-pulse" cx="50" cy="10" r="3.5" fill="#3fd0ff"/>
         <text x="60" y="14" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#3fd0ff">GPS Active</text>
         <!-- High Accuracy Chip -->
-        <rect x="186" y="0" width="112" height="20" rx="10" fill="rgba(63, 208, 255, 0.12)" stroke="rgba(63, 208, 255, 0.3)"/>
-        <text x="242" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#3fd0ff" text-anchor="middle">highAccuracy: true</text>
+        <rect x="174" y="0" width="130" height="20" rx="10" fill="rgba(63, 208, 255, 0.12)" stroke="rgba(63, 208, 255, 0.3)"/>
+        <text x="239" y="14" font-family="ui-monospace, monospace" font-size="10" font-weight="700" fill="#3fd0ff" text-anchor="middle">highAccuracy: true</text>
       </g>
 
       <!-- Floating Location Result HUD Card (Bottom of Screen, wrapped in static positioning group) -->
@@ -372,13 +372,13 @@
           <!-- Header / Fix Status -->
           <g transform="translate(16, 20)">
             <!-- Status Indicator Pill -->
-            <rect width="102" height="22" rx="11" fill="rgba(88, 224, 138, 0.14)" stroke="#58e08a" stroke-width="1"/>
-            <circle cx="11" cy="11" r="3.5" fill="#58e08a"/>
-            <text x="21" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#58e08a" letter-spacing="0.5">POSITION FIX</text>
+            <rect width="114" height="22" rx="11" fill="rgba(88, 224, 138, 0.14)" stroke="#58e08a" stroke-width="1"/>
+            <circle cx="14" cy="11" r="3.5" fill="#58e08a"/>
+            <text x="24" y="15" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" font-weight="800" fill="#58e08a" letter-spacing="0.5">POSITION FIX</text>
 
             <!-- Provider Chip -->
-            <rect x="194" width="96" height="22" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
-            <text x="242" y="15" font-family="ui-monospace, monospace" font-size="10" fill="#ffd56a" text-anchor="middle">provider: "gps"</text>
+            <rect x="178" width="112" height="22" rx="6" fill="rgba(255, 255, 255, 0.05)" stroke="rgba(255, 255, 255, 0.12)"/>
+            <text x="234" y="15" font-family="ui-monospace, monospace" font-size="10" fill="#ffd56a" text-anchor="middle">provider: "gps"</text>
           </g>
 
           <!-- Coordinates Display -->
@@ -415,7 +415,7 @@
           <g transform="translate(16, 154)">
             <rect width="290" height="20" rx="6" fill="rgba(63, 208, 255, 0.08)"/>
             <text x="145" y="14" font-family="ui-monospace, monospace" font-size="9.5" font-weight="600" fill="#3fd0ff" text-anchor="middle">
-              GetLocation.getCurrentPosition() ➔ Promise&lt;Location&gt;
+              getCurrentPosition() ➔ Promise&lt;Location&gt;
             </text>
           </g>
         </g>
