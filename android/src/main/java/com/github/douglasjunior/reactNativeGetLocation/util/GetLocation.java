@@ -28,6 +28,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -80,6 +81,7 @@ public class GetLocation {
                         resultLocation.putDouble("speed", location.getSpeed());
                         resultLocation.putDouble("bearing", location.getBearing());
                         resultLocation.putDouble("time", location.getTime());
+                        resultLocation.putBoolean("mocked", isMocked(location));
                         promise.resolve(resultLocation);
                         stop();
                         clearReferences();
@@ -156,6 +158,14 @@ public class GetLocation {
         promise = null;
         timer = null;
         listener = null;
+    }
+
+    @SuppressWarnings("deprecation")
+    private static boolean isMocked(Location location) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return location.isMock();
+        }
+        return location.isFromMockProvider();
     }
 
     private boolean isLocationEnabled() {
