@@ -54,7 +54,6 @@ jobs:
         with:
           node-version: 24
           cache: yarn
-          registry-url: https://registry.npmjs.org
 
       - name: Use an npm version that supports Trusted Publishing
         # Trusted Publishing (OIDC) requires npm >= 11.5.1.
