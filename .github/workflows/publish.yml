@@ -15,8 +15,8 @@
 #   Workflow filename: publish.yml · Environment: (leave empty)
 #
 # The version commit is pushed by the `douglasjunior-bot` GitHub App, which is on
-# the bypass list of the ruleset that protects the default branch. The App ID
-# and private key live in the RELEASE_APP_ID and RELEASE_APP_PRIVATE_KEY secrets.
+# the bypass list of the ruleset that protects the default branch. The App Client ID
+# and private key live in the RELEASE_APP_CLIENT_ID and RELEASE_APP_PRIVATE_KEY secrets.
 #
 # A release marked as "pre-release" is published under the `next` dist-tag
 # instead of `latest`.
@@ -40,17 +40,17 @@ jobs:
     name: Publish ${{ github.event.release.tag_name }} to npm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
-          app-id: ${{ secrets.RELEASE_APP_ID }}
+          client-id: ${{ secrets.RELEASE_APP_CLIENT_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: yarn
