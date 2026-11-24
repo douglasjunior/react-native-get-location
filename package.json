@@ -45,42 +45,25 @@
     }
   },
   "scripts": {
-    "build": "tsc",
-    "publish-script": "node scripts/publish.js"
+    "build": "tsc"
   },
   "peerDependencies": {
-    "react-native": ">=0.71"
+    "react-native": ">=0.80"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "18.0.1",
-    "@react-native/babel-preset": "0.79.5",
-    "@react-native/eslint-config": "0.79.5",
-    "@react-native/metro-config": "0.79.5",
-    "@react-native/typescript-config": "0.79.5",
-    "@types/jest": "^29.5.13",
-    "@types/react": "^19.0.0",
-    "@types/react-test-renderer": "^19.0.0",
+    "@react-native/babel-preset": "0.88.1",
+    "@react-native/eslint-config": "0.88.1",
+    "@react-native/typescript-config": "0.88.1",
+    "@types/react": "^19.2.0",
     "eslint": "^8.19.0",
-    "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react": "19.0.0",
-    "react-native": "0.79.5",
-    "react-test-renderer": "19.0.0",
-    "typescript": "5.0.4"
+    "react": "19.3.0",
+    "react-native": "0.88.1",
+    "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">= 22.11.0"
   },
-  "resolutions": {
-    "**/@typescript-eslint/typescript-estree/minimatch": "^9.0.7",
-    "**/test-exclude/glob/minimatch": "^3.1.4",
-    "**/@react-native-community/cli-config-android/fast-xml-parser": "^4.5.5",
-    "**/@react-native-community/cli-platform-apple/fast-xml-parser": "^4.5.5",
-    "**/flat-cache/flatted": "^3.4.2",
-    "**/micromatch/picomatch": "^2.3.2",
-    "**/jest-util/picomatch": "^2.3.2"
-  }
+  "packageManager": "yarn@1.22.22"
 }

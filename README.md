@@ -13,7 +13,7 @@
   <a href="https://www.npmjs.com/package/react-native-get-location"><img src="https://img.shields.io/npm/v/react-native-get-location?style=flat-square&color=3FD0FF" alt="npm version"></a>
   <a href="https://www.npmjs.com/package/react-native-get-location"><img src="https://img.shields.io/npm/dt/react-native-get-location?style=flat-square&color=FF6A8E" alt="npm downloads"></a>
   <img src="https://img.shields.io/badge/platform-Android_%7C_iOS-lightgrey?style=flat-square" alt="Platform Android and iOS">
-  <img src="https://img.shields.io/badge/React_Native->=0.71.0-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React Native >= 0.71.0">
+  <img src="https://img.shields.io/badge/React_Native->=0.80.0-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React Native >= 0.80.0">
   <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript strict">
   <a href="https://github.com/douglasjunior/react-native-get-location/pulls"><img src="https://img.shields.io/badge/PRs-welcome-22C55E?style=flat-square" alt="PRs welcome"></a>
 </p>
@@ -87,9 +87,9 @@ try {
 
 | Requirement | Supported Version |
 |---|---|
-| **React Native** | `>= 0.71.0` |
+| **React Native** | `>= 0.80.0` |
 | **iOS** | `>= 14.0` |
-| **Android** | `>= API 21` (Android 5.0 Lollipop) |
+| **Android** | `>= API 24` (Android 7.0 Nougat) |
 | **Architecture** | Both New Architecture (TurboModule) & Legacy Architecture |
 
 ---

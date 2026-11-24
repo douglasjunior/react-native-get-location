@@ -22,15 +22,20 @@
  * SOFTWARE.
  */
 
-import React, {useState} from 'react';
+import { useState } from 'react';
 import {
+  ActivityIndicator,
+  Button,
   Platform,
+  StatusBar,
   StyleSheet,
   Text,
   View,
-  Button,
-  ActivityIndicator,
 } from 'react-native';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import GetLocation, {
   Location,
@@ -72,6 +77,16 @@ const styles = StyleSheet.create({
 });
 
 function App() {
+  return (
+    <SafeAreaProvider>
+      <StatusBar barStyle="dark-content" />
+      <AppContent />
+    </SafeAreaProvider>
+  );
+}
+
+function AppContent() {
+  const safeAreaInsets = useSafeAreaInsets();
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<LocationErrorCode | null>(null);
@@ -96,7 +111,7 @@ function App() {
       })
       .catch(ex => {
         if (isLocationError(ex)) {
-          const {code, message} = ex;
+          const { code, message } = ex;
           console.warn(code, message);
           setError(code);
         } else {
@@ -108,7 +123,17 @@ function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingTop: safeAreaInsets.top,
+          paddingBottom: safeAreaInsets.bottom,
+          paddingLeft: safeAreaInsets.left,
+          paddingRight: safeAreaInsets.right,
+        },
+      ]}
+    >
       <Text style={styles.welcome}>Welcome to React Native!</Text>
       <Text style={styles.instructions}>
         To get location, press the button:
