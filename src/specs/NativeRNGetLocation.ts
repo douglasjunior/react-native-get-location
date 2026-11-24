@@ -1,6 +1,5 @@
-import type {TurboModule} from 'react-native';
+import type {TurboModule, CodegenTypes} from 'react-native';
 import {TurboModuleRegistry} from 'react-native';
-import {Float, Int32} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type NativeOptions = {
   /**
@@ -14,50 +13,54 @@ export type NativeOptions = {
    *
    * Default: 60000 (60 seconds)
    */
-  timeout: Int32;
+  timeout: CodegenTypes.Int32;
 };
 
 export type Location = {
   /**
    * The latitude, in degrees
    */
-  latitude: Float;
+  latitude: CodegenTypes.Float;
   /**
    * The longitude, in degrees
    */
-  longitude: Float;
+  longitude: CodegenTypes.Float;
   /**
    * The altitude if available, in meters above the WGS 84 reference ellipsoid
    */
-  altitude: Float;
+  altitude: CodegenTypes.Float;
   /**
    * The estimated horizontal accuracy of this location, radial, in meters
    */
-  accuracy: Float;
+  accuracy: CodegenTypes.Float;
   /**
    * The speed if it is available, in meters/second over ground
    */
-  speed: Float;
+  speed: CodegenTypes.Float;
   /**
    * The UTC time of this fix, in milliseconds since January 1, 1970.
    */
-  time: Int32;
+  time: CodegenTypes.Int32;
   /**
    * (Android only) The bearing, in degrees
    */
-  bearing?: Float;
+  bearing?: CodegenTypes.Float;
   /**
    * (Android only) The name of the provider that generated this fix
    */
   provider?: string;
   /**
+   * (Android only) `true` when Android has flagged this fix as coming from a mock provider
+   */
+  mocked?: boolean;
+  /**
    * (iOS only) The vertical accuracy of the location. Negative if the altitude is invalid
    */
-  verticalAccuracy?: Float;
+  verticalAccuracy?: CodegenTypes.Float;
   /**
    * (iOS only) The course of the location in degrees true North. Negative if course is invalid. (0.0 - 359.9 degrees, 0 being true North)
    */
-  course?: Float;
+  course?: CodegenTypes.Float;
 };
 
 export interface Spec extends TurboModule {
