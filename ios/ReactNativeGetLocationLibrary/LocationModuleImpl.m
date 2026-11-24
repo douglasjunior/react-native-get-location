@@ -23,13 +23,13 @@
 #import "LocationModuleImpl.h"
 #import <React/RCTLog.h>
 
-@implementation LocationModuleImpl
-
-NSTimer* mTimer;
-CLLocationManager* mLocationManager;
-RCTPromiseResolveBlock mResolve;
-RCTPromiseRejectBlock mReject;
-double mTimeout;
+@implementation LocationModuleImpl {
+    NSTimer* mTimer;
+    CLLocationManager* mLocationManager;
+    RCTPromiseResolveBlock mResolve;
+    RCTPromiseRejectBlock mReject;
+    double mTimeout;
+}
 
 - (instancetype)init {
     self = [super init];
@@ -53,12 +53,14 @@ double mTimeout;
             locationManager.distanceFilter = kCLDistanceFilterNone;
             locationManager.desiredAccuracy = enableHighAccuracy ? kCLLocationAccuracyBest : kCLLocationAccuracyNearestTenMeters;
             
-            mResolve = resolve;
-            mReject = reject;
-            mLocationManager = locationManager;
-            mTimeout = timeout;
+            self->mResolve = resolve;
+            self->mReject = reject;
+            self->mLocationManager = locationManager;
+            self->mTimeout = timeout;
             
-            [self startUpdatingLocation];
+            // No start here: from iOS 14 the manager reports its authorization state through
+            // locationManagerDidChangeAuthorization: right after it is created, and that
+            // callback (handleAuthorizationStatus) is the only path that prompts or starts.
         }
         @catch (NSException *exception) {
             NSMutableDictionary * info = [NSMutableDictionary dictionary];
@@ -69,6 +71,7 @@ double mTimeout;
             [info setValue:exception.userInfo forKey:@"ExceptionUserInfo"];
             
             NSError *error = [[NSError alloc] initWithDomain:@"Location service is disabled or unavailable" code:1 userInfo:info];
+            [self clearReferences];
             reject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
         }
     });
@@ -76,7 +79,7 @@ double mTimeout;
 
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (locations.count > 0 && mResolve != nil) {
-        CLLocation* location = locations[0];
+        CLLocation* location = locations.lastObject;
         
         NSDictionary* locationResult = @{
             @"latitude": @(location.coordinate.latitude),
@@ -95,10 +98,20 @@ double mTimeout;
 }
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    // kCLErrorLocationUnknown is transient: Core Location could not get a fix yet
-    // but keeps trying, so keep waiting while the timeout bounds the request.
-    if ([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown && mTimeout > 0) {
-        return;
+    if ([error.domain isEqualToString:kCLErrorDomain]) {
+        if (error.code == kCLErrorLocationUnknown) {
+            // Transient: Core Location has no fix yet but keeps trying. Keep waiting; the
+            // timeout, when there is one, bounds the wait (same as Android).
+            return;
+        }
+        if (error.code == kCLErrorDenied) {
+            // Permission revoked while the request was pending.
+            if (mReject != nil) {
+                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", error);
+            }
+            [self clearReferences];
+            return;
+        }
     }
     if (mReject != nil) {
         mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", error);
@@ -113,11 +126,13 @@ double mTimeout;
     [self clearReferences];
 }
 
+// Must be called on the main thread, where the manager and the timer live.
 - (void) clearReferences {
     if (mTimer != nil) {
         [mTimer invalidate];
     }
     if (mLocationManager != nil) {
+        mLocationManager.delegate = nil;
         [mLocationManager stopUpdatingLocation];
     }
     mResolve = nil;
@@ -128,76 +143,79 @@ double mTimeout;
 }
 
 - (void) cancelPreviousRequest {
-    if (mLocationManager != nil) {
+    if (mLocationManager != nil && mReject != nil) {
         mReject(@"CANCELLED", @"Location cancelled by user or by another request", nil);
     }
     [self clearReferences];
 }
 
+// Only called from handleAuthorizationStatus with an authorized status, on the main thread.
 - (void) startUpdatingLocation {
-    if (![self isAuthorized]) {
-        NSLog(@"[locationManager requestWhenInUseAuthorization]");
-        [mLocationManager requestWhenInUseAuthorization];
-        return;
-    }
-    
     NSLog(@"[locationManager startUpdatingLocation]");
     [mLocationManager startUpdatingLocation];
     
-    if (mTimeout > 0) {
-        // On the main run loop: this also runs from the background queue of
-        // locationManagerDidChangeAuthorization, where a scheduled timer never
-        // fires. One timer per request, so a repeated start doesn't orphan one.
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (mLocationManager == nil || mTimer != nil) {
-                return;
-            }
-            NSTimeInterval timeoutInterval = mTimeout / 1000.0;
-            mTimer = [NSTimer scheduledTimerWithTimeInterval:timeoutInterval
-                                                      target:self
-                                                    selector:@selector(runTimeout:)
-                                                    userInfo:nil
-                                                     repeats:NO];
-        });
+    // One timer per request: a further authorized callback for the same manager
+    // (e.g. WhenInUse -> Always) must not restart the timeout.
+    if (mTimeout > 0 && mTimer == nil) {
+        mTimer = [NSTimer scheduledTimerWithTimeInterval:mTimeout / 1000.0
+                                                  target:self
+                                                selector:@selector(runTimeout:)
+                                                userInfo:nil
+                                                 repeats:NO];
     }
 }
 
+// Delegate callbacks arrive on the main thread (the manager is created there). Only
+// +locationServicesEnabled, which can block, is queried off the main thread.
 - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+    CLAuthorizationStatus status = [manager authorizationStatus];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (![CLLocationManager locationServicesEnabled]) {
-            mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
-            [self clearReferences];
-            return;
-        }
-        
-        switch ([manager authorizationStatus]) {
-            case kCLAuthorizationStatusAuthorizedAlways:
-            case kCLAuthorizationStatusAuthorizedWhenInUse: {
-                [self startUpdatingLocation];
-                break;
-            }
-            case kCLAuthorizationStatusNotDetermined: {
-                // user has not authorized ou denied yet
-                break;
-            }
-            case kCLAuthorizationStatusDenied:
-            case kCLAuthorizationStatusRestricted:
-            default: {
-                if (mReject != nil) {
-                    mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
-                }
-                [self clearReferences];
-                break;
-            }
-        }
+        BOOL servicesEnabled = [CLLocationManager locationServicesEnabled];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self handleAuthorizationStatus:status servicesEnabled:servicesEnabled forManager:manager];
+        });
     });
 }
 
-- (BOOL) isAuthorized {
-    int authorizationStatus = [mLocationManager authorizationStatus];
+// Runs on the main thread. Single entry point of the request flow: the first callback
+// follows the manager's creation and drives prompt, start or failure.
+- (void) handleAuthorizationStatus:(CLAuthorizationStatus)status servicesEnabled:(BOOL)servicesEnabled forManager:(CLLocationManager *)manager {
+    // The request this callback belonged to may have been finished or replaced while hopping queues.
+    if (manager != mLocationManager) {
+        return;
+    }
     
-    return authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse
-    || authorizationStatus == kCLAuthorizationStatusAuthorizedAlways;
+    if (!servicesEnabled) {
+        if (mReject != nil) {
+            mReject(@"UNAVAILABLE", @"Location service is disabled or unavailable", nil);
+        }
+        [self clearReferences];
+        return;
+    }
+    
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse: {
+            [self startUpdatingLocation];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined: {
+            // The prompt result arrives through locationManagerDidChangeAuthorization:.
+            NSLog(@"[locationManager requestWhenInUseAuthorization]");
+            [mLocationManager requestWhenInUseAuthorization];
+            break;
+        }
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
+        default: {
+            if (mReject != nil) {
+                mReject(@"UNAUTHORIZED", @"Location permission denied by the user", nil);
+            }
+            [self clearReferences];
+            break;
+        }
+    }
 }
 
 @end
