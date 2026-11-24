@@ -350,6 +350,7 @@ The resolved geolocation object.
 | `time` | `number` | Both | UTC timestamp of this fix, in milliseconds since Unix Epoch. |
 | `bearing` | `number?` | Android only | Direction of travel in degrees (0.0 to 359.9). |
 | `provider` | `string?` | Android only | Name of the native provider that generated this fix (e.g., `'gps'`, `'network'`). |
+| `mocked` | `boolean?` | Android only | `true` when Android has flagged the fix as coming from a mock provider (e.g. a fake GPS app). |
 | `verticalAccuracy` | `number?` | iOS only | Vertical accuracy of the altitude in meters. Negative if invalid. |
 | `course` | `number?` | iOS only | Course in degrees true North (0.0 to 359.9). Negative if invalid. |
 

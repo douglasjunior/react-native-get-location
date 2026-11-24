@@ -51,6 +51,10 @@ export type Location = {
    */
   provider?: string;
   /**
+   * (Android only) `true` when Android has flagged this fix as coming from a mock provider
+   */
+  mocked?: boolean;
+  /**
    * (iOS only) The vertical accuracy of the location. Negative if the altitude is invalid
    */
   verticalAccuracy?: Float;
