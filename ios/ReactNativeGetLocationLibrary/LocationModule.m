@@ -26,19 +26,37 @@
 #import "LocationModule.h"
 #import <React/RCTLog.h>
 
-@implementation LocationModule
+@implementation LocationModule {
+    // Each module instance owns its implementation, so hosts do not share requests and the
+    // implementation lives and dies with the module.
+    LocationModuleImpl *_impl;
+}
 
 RCT_EXPORT_MODULE(RNGetLocation);
 
-LocationModuleImpl* locationModuleImpl;
+// The initializer only allocates; it does not need the main thread. Without this, React Native
+// assumes that a module with a custom init must be created on the main thread.
++ (BOOL)requiresMainQueueSetup {
+    return NO;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _impl = [[LocationModuleImpl alloc] init];
+    }
+    return self;
+}
+
+// React Native calls this when the bridge is invalidated (e.g. reload).
+- (void)invalidate {
+    [_impl invalidate];
+}
 
 RCT_EXPORT_METHOD(getCurrentPosition: (NSDictionary*) options
                   promise: (RCTPromiseResolveBlock) resolve
                   rejecter: (RCTPromiseRejectBlock) reject) {
-    if (locationModuleImpl == nil) {
-        locationModuleImpl = [[LocationModuleImpl alloc] init];
-    }
-    [locationModuleImpl getCurrentPosition:options promise:resolve rejecter:reject];
+    [_impl getCurrentPosition:options promise:resolve rejecter:reject];
 }
 
 

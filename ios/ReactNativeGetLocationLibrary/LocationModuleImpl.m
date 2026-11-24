@@ -47,6 +47,8 @@
 // right after creation (iOS 14+) is the only path that prompts or starts.
 - (void)start;
 - (void)cancel;
+// Ends the request without settling its promise. Only for the end of life of the owner.
+- (void)abandon;
 - (void)rejectWithCode:(NSString *)code message:(NSString *)message error:(NSError *)error;
 
 @end
@@ -87,6 +89,15 @@
 
 - (void)cancel {
     [self rejectWithCode:@"CANCELLED" message:@"Location cancelled by user or by another request" error:nil];
+}
+
+// Used when the owning module is invalidated, which means the JS runtime that holds the promise is
+// being destroyed. React Native drops a resolve/reject called after that (the old architecture
+// ignores callbacks once the bridge is not valid; the new architecture's callbacks no longer find
+// their JS function), so settling would do nothing useful and could only run JS handlers in the
+// middle of the teardown. The request releases its state through -finish like any other end.
+- (void)abandon {
+    [self finish];
 }
 
 #pragma mark Termination
@@ -251,6 +262,21 @@
     if (self) {
     }
     return self;
+}
+
+// Called from the owning module's -invalidate, on a React Native queue that is not the main one
+// (the module has no methodQueue, so React Native gives it a serial queue of its own, or the
+// TurboModule manager's shared one). It must not wait for the main thread: React Native waits for
+// -invalidate to return, and may do so from the main thread. So the work is dispatched
+// asynchronously. The block holds this object strongly, so it survives the module being released
+// before the block runs. Blocks queued earlier by getCurrentPosition run first (main queue is FIFO),
+// so a request started just before the invalidation is also ended.
+- (void)invalidate {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RNGLLocationRequest *request = self->_currentRequest;
+        self->_currentRequest = nil;
+        [request abandon];
+    });
 }
 
 - (void) getCurrentPosition: (NSDictionary*) options

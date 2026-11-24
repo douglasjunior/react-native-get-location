@@ -30,4 +30,9 @@
                     promise: (RCTPromiseResolveBlock) resolve
                    rejecter: (RCTPromiseRejectBlock) reject;
 
+// Ends the pending request, if any, when the owning module is invalidated. Safe to call from any
+// thread; the work runs on the main thread. The promise of the pending request is NOT settled: see
+// -invalidate in LocationModuleImpl.m.
+- (void) invalidate;
+
 @end

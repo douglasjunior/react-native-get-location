@@ -23,12 +23,13 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 #import <Foundation/Foundation.h>
+#import <React/RCTInvalidating.h>
 #import <rngetlocation_codegen/rngetlocation_codegen.h>
 #import "LocationModuleImpl.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNGetLocationTurbo : NSObject <NativeRNGetLocationSpec>
+@interface RNGetLocationTurbo : NSObject <NativeRNGetLocationSpec, RCTInvalidating>
 
 @end
 

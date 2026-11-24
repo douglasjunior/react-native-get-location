@@ -24,11 +24,12 @@
 #else
 
 #import <React/RCTBridgeModule.h>
+#import <React/RCTInvalidating.h>
 #import <React/RCTConvert.h>
 #import <CoreLocation/CoreLocation.h>
 #import "LocationModuleImpl.h"
 
-@interface LocationModule : NSObject <RCTBridgeModule, CLLocationManagerDelegate>
+@interface LocationModule : NSObject <RCTBridgeModule, RCTInvalidating, CLLocationManagerDelegate>
 
 @end
 

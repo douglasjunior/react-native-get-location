@@ -24,12 +24,33 @@
 
 #import "RNGetLocationTurbo.h"
 
-@implementation RNGetLocationTurbo
-
-LocationModuleImpl* locationModuleImpl;
+@implementation RNGetLocationTurbo {
+    // Each module instance owns its implementation, so hosts do not share requests and the
+    // implementation lives and dies with the module.
+    LocationModuleImpl *_impl;
+}
 
 + (NSString *)moduleName { 
     return @"RNGetLocation";
+}
+
+// The initializer only allocates; it does not need the main thread. Without this, React Native
+// assumes that a module with a custom init must be created on the main thread.
++ (BOOL)requiresMainQueueSetup {
+    return NO;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _impl = [[LocationModuleImpl alloc] init];
+    }
+    return self;
+}
+
+// React Native calls this when the host/instance is invalidated (e.g. reload).
+- (void)invalidate {
+    [_impl invalidate];
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params { 
@@ -37,11 +58,8 @@ LocationModuleImpl* locationModuleImpl;
 }
 
 - (void)getCurrentPosition:(JS::NativeRNGetLocation::NativeOptions &)options resolve:(nonnull RCTPromiseResolveBlock)resolve reject:(nonnull RCTPromiseRejectBlock)reject { 
-    if (locationModuleImpl == nil) {
-        locationModuleImpl = [[LocationModuleImpl alloc] init];
-    }
     NSDictionary* optionsDict = [self fromNativeOptions:options];
-    [locationModuleImpl getCurrentPosition:optionsDict promise:resolve rejecter:reject];
+    [_impl getCurrentPosition:optionsDict promise:resolve rejecter:reject];
 }
 
 - (NSDictionary *)fromNativeOptions:(JS::NativeRNGetLocation::NativeOptions &)options {
