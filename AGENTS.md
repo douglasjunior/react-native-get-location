@@ -57,7 +57,7 @@ JS merges defaults -> (Android only) `requestAndroidPermission` -> native `getCu
   - `UNAUTHORIZED`: `Location permission denied by the user`
   - Places: `src/utils.ts`, `src/LocationError.ts` (doc comments), `android/.../util/GetLocation.java`, `ios/.../LocationModuleImpl.m`, `README.md`. A change in one requires the others. Note the `TIMEOUT` doc comment in `src/LocationError.ts` currently reads "Location request timed out"; the runtime message is the one above.
 - Timeout rejects with `TIMEOUT`; `timeout <= 0` means no timer. A new request while one is pending rejects the old one with `CANCELLED`. Resolve/reject at most once, then stop updates and clear references.
-- Android permission denial in JS and `SecurityException` in native both map to `UNAUTHORIZED`. On iOS, the only start path is `locationManagerDidChangeAuthorization` -> `handleAuthorizationStatus` (prompt, start, UNAUTHORIZED); `getCurrentPosition` must not start updates itself and `startUpdatingLocation` must not re-check authorization.
+- Android permission denial in JS and `SecurityException` in native both map to `UNAUTHORIZED`. On iOS, each request is an `RNGLLocationRequest` (own manager, timer and promise blocks; it ends only through `finish`), and its only start path is `locationManagerDidChangeAuthorization` -> `handleAuthorizationStatus` (prompt, start, UNAUTHORIZED); `getCurrentPosition` must not start updates itself and `startUpdatingLocation` must not re-check authorization.
 - Android/iOS parity: same options, same codes, same success shape for shared fields. Platform-only `Location` fields are optional and documented as such (Android: `bearing`, `provider`, `mocked`; iOS: `verticalAccuracy`, `course`).
 - Backward compatible API: never rename or remove existing options, fields or exports; new `Location` fields are optional.
 - No third-party location dependencies (no Google Play Services, no fused provider); only `LocationManager` and `CLLocationManager`.
@@ -69,7 +69,7 @@ JS merges defaults -> (Android only) `requestAndroidPermission` -> native `getCu
 Add a field to `Location` (optional, backward compatible):
 1. Add the property to `Location` in `src/specs/NativeRNGetLocation.ts` with a doc comment (`?` and an "(Android only)" / "(iOS only)" prefix when not on both platforms).
 2. Android: add it to the result map in `onLocationChanged` in `android/.../util/GetLocation.java`; guard APIs by SDK level (`minSdk` 24).
-3. iOS: add it to the dictionary in `didUpdateLocations` in `ios/.../LocationModuleImpl.m`.
+3. iOS: add it to the dictionary in `resolveWithLocation:` (`RNGLLocationRequest`) in `ios/.../LocationModuleImpl.m`.
 4. Update the `Location` table in `README.md`.
 5. Validate in the Sample on both platforms with New Architecture on; add the field to `Sample/App.tsx` output if useful.
 
